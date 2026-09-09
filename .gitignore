@@ -11,3 +11,5 @@ dist
 .env*
 /Снимок экрана*.png
 /Screenshot*.png
+
+supabase/migrations/Default Project/
