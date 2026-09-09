@@ -45,6 +45,7 @@ export function SmartImage({ src, alt = '', className, ...props }: ImgHTMLAttrib
         src={current}
         alt={alt}
         loading="lazy"
+        decoding="async"
         onLoad={() => setLoaded(true)}
         onError={() => {
           if (current !== FALLBACK) setCurrent(FALLBACK)

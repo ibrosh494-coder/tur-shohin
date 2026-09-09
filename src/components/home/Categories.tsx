@@ -9,7 +9,7 @@ export function CategoriesSection() {
   const db = useDB()
 
   return (
-    <section className="section">
+    <section className="section cv-auto">
       <div className="container-x">
         <SectionHeader title={t('cats.title')} subtitle={t('cats.subtitle')} />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -27,12 +27,12 @@ export function CategoriesSection() {
                         src={c.image}
                         alt=""
                         loading="lazy"
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-108"
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-graphite-950/80 via-graphite-950/25 to-transparent" />
                     <div className="absolute inset-x-0 bottom-0 p-4">
-                      <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/20 text-white backdrop-blur-md transition-colors group-hover:bg-pine-600">
+                      <div className="grid h-10 w-10 place-items-center rounded-2xl bg-white/20 text-white transition-colors group-hover:bg-pine-600">
                         <CategoryIcon icon={c.icon} />
                       </div>
                       <h3 className="mt-2 font-display text-base font-semibold text-white md:text-lg">{loc(c.name, 'ru')}</h3>
@@ -61,7 +61,7 @@ export function DestinationsSection() {
   })
 
   return (
-    <section className="section bg-graphite-50/60">
+    <section className="section bg-graphite-50/60 cv-auto">
       <div className="container-x">
         <SectionHeader
           title={t('dests.title')}
@@ -84,7 +84,7 @@ export function DestinationsSection() {
                   src={d.image}
                   alt=""
                   loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-108"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-graphite-950/80 via-graphite-950/20 to-transparent transition-opacity" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
@@ -92,7 +92,7 @@ export function DestinationsSection() {
                   <p className="mt-0.5 text-sm text-white/70">
                     {d.count} {t('dests.tours')}
                   </p>
-                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-bold text-white backdrop-blur-md transition-colors group-hover:bg-pine-600">
+                  <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-1.5 text-xs font-bold text-white transition-colors group-hover:bg-pine-600">
                     {t('dests.explore')} <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>

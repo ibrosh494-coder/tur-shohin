@@ -42,8 +42,8 @@ export function Hero() {
       <motion.div
         initial={{ scale: 1.12 }}
         animate={{ scale: 1 }}
-        transition={{ duration: 8, ease: 'easeOut' }}
-        className="absolute inset-0"
+        transition={{ duration: 4, ease: 'easeOut' }}
+        className="absolute inset-0 will-change-transform"
       >
         <img
           src={IMG.range}
@@ -55,7 +55,7 @@ export function Hero() {
 
       <div className="container-x relative z-10 pb-16 pt-32 text-center md:pb-24">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.15 }}>
-          <span className="chip border-white/25 bg-white/10 text-white backdrop-blur-md">{t('hero.badge')}</span>
+          <span className="chip border-white/25 bg-white/10 text-white">{t('hero.badge')}</span>
         </motion.div>
 
         <motion.h1
@@ -81,7 +81,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 32, scale: 0.98 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mx-auto mt-10 max-w-5xl rounded-3xl bg-white/95 p-3 shadow-lift backdrop-blur-xl md:rounded-[28px]"
+          className="mx-auto mt-10 max-w-5xl rounded-3xl bg-white/95 p-3 shadow-lift md:rounded-[28px]"
         >
           <div className="grid gap-2 md:grid-cols-4">
             <label className="relative flex flex-col rounded-2xl px-4 py-3 text-left transition-colors hover:bg-graphite-50 md:border-r md:border-graphite-100">

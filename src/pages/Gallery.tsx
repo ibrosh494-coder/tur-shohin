@@ -39,12 +39,11 @@ export default function Gallery() {
         </div>
       </section>
 
-      <section className="section pt-8">
+      <section className="section pt-8 cv-auto">
         <div className="container-x">
-          <motion.div layout className="columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4">
+          <div className="columns-2 gap-4 md:columns-3 lg:columns-4 [&>*]:mb-4">
             {items.map((g, i) => (
               <motion.button
-                layout
                 key={g.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -64,7 +63,7 @@ export default function Gallery() {
                 </div>
               </motion.button>
             ))}
-          </motion.div>
+          </div>
         </div>
       </section>
 

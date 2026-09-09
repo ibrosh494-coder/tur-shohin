@@ -59,7 +59,7 @@ export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
           <SmartImage
             src={tour.images[0]}
             alt={tour.title.ru}
-            className="absolute inset-0 transition-transform duration-700 group-hover:scale-108"
+            className="absolute inset-0 transition-transform duration-700 group-hover:scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-graphite-950/70 via-transparent to-transparent opacity-90" />
           <FavoriteHeart tourId={tour.id} className="absolute right-3 top-3" />

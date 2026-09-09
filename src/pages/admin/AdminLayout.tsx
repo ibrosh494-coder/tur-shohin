@@ -1,5 +1,5 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { LayoutDashboard, Route, ClipboardList, Star, Newspaper, ArrowLeft } from 'lucide-react'
+import { LayoutDashboard, Route, ClipboardList, Star, Newspaper, ArrowLeft, Users } from 'lucide-react'
 import { useApp } from '../../lib/AppContext'
 import { cn } from '../../components/ui'
 
@@ -9,6 +9,7 @@ const NAV = [
   { to: '/admin/bookings', label: 'Бронирования', icon: ClipboardList },
   { to: '/admin/reviews', label: 'Отзывы', icon: Star },
   { to: '/admin/news', label: 'Новости', icon: Newspaper },
+  { to: '/admin/users', label: 'Пользователи', icon: Users },
 ]
 
 export default function AdminLayout() {

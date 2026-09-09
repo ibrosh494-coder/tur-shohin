@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
 import type { User } from '../types'
-import { mutate, getDB, pushUser } from './store'
+import { mutate, getDB, pushUser, isUserBlocked } from './store'
 import { supabase } from './supabase'
 
 const SESSION_KEY = 'turshohin_session'
@@ -95,14 +95,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const target = email.trim().toLowerCase()
     let found: User | undefined
     if (supabase) {
-      const { data } = await supabase.from('users').select('*').eq('email', target).maybeSingle()
-      found = (data as User) ?? getDB().users.find((u) => u.email.toLowerCase() === target)
+      try {
+        const { data } = await supabase.from('users').select('*').eq('email', target).maybeSingle()
+        found = (data as User) ?? getDB().users.find((u) => u.email.toLowerCase() === target)
+      } catch {
+        // Сеть недоступна — вход по локальному кэшу.
+        found = getDB().users.find((u) => u.email.toLowerCase() === target)
+      }
     } else {
       found = getDB().users.find((u) => u.email.toLowerCase() === target)
     }
     const hash = await sha256(password)
     if (!found || found.passwordHash !== hash) {
       return { ok: false, error: 'Неверный email или пароль' }
+    }
+    if (isUserBlocked(found)) {
+      return { ok: false, error: 'Аккаунт заблокирован администратором' }
     }
     localStorage.setItem(SESSION_KEY, JSON.stringify(found))
     setUser(found)
@@ -111,7 +119,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(async (input: { name: string; email: string; phone?: string; password: string }) => {
     const email = input.email.trim().toLowerCase()
-    const exists = supabase ? await supabase.from('users').select('id').eq('email', email).maybeSingle() : null
+    let exists = null
+    if (supabase) {
+      try {
+        exists = await supabase.from('users').select('id').eq('email', email).maybeSingle()
+      } catch {
+        exists = null
+      }
+    }
     if (exists?.data || getDB().users.some((u) => u.email.toLowerCase() === email)) {
       return { ok: false, error: 'Пользователь с таким email уже существует' }
     }
@@ -144,8 +159,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const target = email.trim().toLowerCase()
     let found: boolean
     if (supabase) {
-      const { data } = await supabase.from('users').select('id').eq('email', target).maybeSingle()
-      found = !!data
+      try {
+        const { data } = await supabase.from('users').select('id').eq('email', target).maybeSingle()
+        found = !!data
+      } catch {
+        found = false
+      }
     } else {
       found = !!getDB().users.find((u) => u.email.toLowerCase() === target)
     }

@@ -226,7 +226,7 @@ export function Header({ menuOpen, onMenuToggle }: { menuOpen: boolean; onMenuTo
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        solid ? 'glass border-b border-graphite-100 shadow-soft' : 'bg-transparent',
+        solid ? 'border-b border-graphite-100 bg-white/90 shadow-soft' : 'bg-transparent',
       )}
     >
       <div className="container-x flex h-16 items-center gap-2 md:h-[72px] md:gap-6">

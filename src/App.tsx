@@ -24,6 +24,7 @@ import ManageTours from './pages/admin/ManageTours'
 import ManageBookings from './pages/admin/ManageBookings'
 import ManageReviews from './pages/admin/ManageReviews'
 import ManageNews from './pages/admin/ManageNews'
+import ManageUsers from './pages/admin/ManageUsers'
 
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user } = useAuth()
@@ -83,6 +84,7 @@ export default function App() {
             <Route path="bookings" element={<ManageBookings />} />
             <Route path="reviews" element={<ManageReviews />} />
             <Route path="news" element={<ManageNews />} />
+            <Route path="users" element={<ManageUsers />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

@@ -4,7 +4,6 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
   }
   body {
@@ -76,6 +75,10 @@
   }
   .pt-safe {
     padding-top: env(safe-area-inset-top);
+  }
+  .cv-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
   }
 }
 

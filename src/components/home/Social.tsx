@@ -21,7 +21,7 @@ export function ReviewsCarousel() {
   }
 
   return (
-    <section className="section">
+    <section className="section cv-auto">
       <div className="container-x">
         <SectionHeader
           title={t('reviews.title')}
@@ -83,7 +83,7 @@ export function GalleryPreview() {
   const db = useDB()
   const items = db.gallery.slice(0, 6)
   return (
-    <section className="section bg-graphite-950">
+    <section className="section cv-auto bg-graphite-950">
       <div className="container-x">
         <div className="flex items-end justify-between">
           <div>
@@ -108,7 +108,7 @@ export function GalleryPreview() {
                 <SmartImage
                   src={g.image}
                   alt=""
-                  className={cn('w-full transition-transform duration-700 group-hover:scale-108', i % 3 === 0 ? 'aspect-[3/4]' : 'aspect-[4/5]')}
+                  className={cn('w-full transition-transform duration-700 group-hover:scale-105', i % 3 === 0 ? 'aspect-[3/4]' : 'aspect-[4/5]')}
                 />
                 <div className="absolute inset-0 bg-graphite-950/30 opacity-0 transition-opacity group-hover:opacity-100" />
               </Link>
@@ -126,7 +126,7 @@ export function StoriesSection() {
   const items = db.news.slice(0, 3)
   if (!items.length) return null
   return (
-    <section className="section">
+    <section className="section cv-auto">
       <div className="container-x">
         <SectionHeader
           title={t('stories.title')}
@@ -173,7 +173,7 @@ export function NewsletterSection() {
   }
 
   return (
-    <section className="section" id="newsletter">
+    <section className="section cv-auto" id="newsletter">
       <div className="container-x">
         <Reveal>
           <div className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-pine-700 to-pine-900 p-10 text-center md:p-16">

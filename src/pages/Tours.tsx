@@ -242,7 +242,7 @@ export default function Tours() {
         </div>
       </section>
 
-      <section className="section pt-10">
+      <section className="section pt-10 cv-auto">
         <div className="container-x grid gap-8 lg:grid-cols-[290px_1fr]">
           <aside className="hidden lg:block">
             <div className="card sticky top-24 p-6">

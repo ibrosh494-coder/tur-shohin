@@ -16,7 +16,7 @@ export function ToursSection() {
     .slice(0, 8)
 
   return (
-    <section className="section">
+    <section className="section cv-auto">
       <div className="container-x">
         <SectionHeader
           title={t('tours.popular')}
@@ -48,7 +48,7 @@ const WHY = [
 export function WhyUs() {
   const { t } = useApp()
   return (
-    <section className="section bg-graphite-950 text-white">
+    <section className="section cv-auto bg-graphite-950 text-white">
       <div className="container-x">
         <SectionHeader title={t('why.title')} subtitle={t('why.subtitle')} className="text-white [&_h2]:text-white [&_p]:text-graphite-400" />
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
@@ -106,12 +106,11 @@ export function Experience() {
   ]
   return (
     <section
-      className="section relative overflow-hidden"
+      className="section relative overflow-hidden cv-auto"
       style={{
         backgroundImage: `url(${IMG.valley})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
-        backgroundAttachment: 'fixed',
       }}
     >
       <div className="absolute inset-0 bg-graphite-950/75" />
@@ -149,7 +148,7 @@ export function OffersSection() {
   const offers = db.tours.filter((tr) => tr.active !== false && tr.discountPercent)
   if (offers.length === 0) return null
   return (
-    <section className="section">
+    <section className="section cv-auto">
       <div className="container-x">
         <SectionHeader title={t('offers.title')} subtitle={t('offers.subtitle')} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -167,7 +166,7 @@ export function HowItWorks() {
   const steps = ['how.1', 'how.2', 'how.3']
   const desc = ['how.1d', 'how.2d', 'how.3d']
   return (
-    <section className="section bg-graphite-50/60">
+    <section className="section bg-graphite-50/60 cv-auto">
       <div className="container-x">
         <SectionHeader title={t('how.title')} subtitle={t('how.subtitle')} />
         <div className="grid gap-6 md:grid-cols-3">

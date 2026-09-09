@@ -12,7 +12,7 @@ const ITEMS = [
 export function BottomNav() {
   const { pathname } = useLocation()
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-graphite-100 bg-white/95 pb-safe backdrop-blur-lg md:hidden">
+    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-graphite-100 bg-white/95 pb-safe md:hidden">
       <div className="grid grid-cols-4">
         {ITEMS.map((item) => {
           const active = pathname === item.to || (item.to === '/tours' && pathname.startsWith('/tour'))

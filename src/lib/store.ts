@@ -128,8 +128,39 @@ function looksValid(name: string, row: Record<string, unknown>): boolean {
   }
 }
 
+function rowsEqual(prev: unknown, nextRows: unknown[]): boolean {
+  try {
+    if (JSON.stringify(prev) === JSON.stringify(nextRows)) return true
+    // Порядок строк из облака может отличаться от локального — сравниваем как наборы.
+    const sig = (arr: unknown[]) =>
+      (arr as { id?: string }[])
+        .map((r) => JSON.stringify(r))
+        .sort()
+        .join('|')
+    return sig(prev as unknown[]) === sig(nextRows)
+  } catch {
+    return false
+  }
+}
+
 function applyTransport(name: string, rows: unknown[]) {
   const valid = rows.filter((r) => r && looksValid(name, r as Record<string, unknown>))
+  const field = name as keyof DB
+  let next: unknown = valid
+  if (name === 'favorites') {
+    next = (valid as { userId: string; tourId: string }[]).reduce<Record<string, string[]>>((acc, r) => {
+      ;(acc[r.userId] ??= []).push(r.tourId)
+      return acc
+    }, {})
+    try {
+      if (JSON.stringify(db.favorites) === JSON.stringify(next)) return
+    } catch {
+      /* fallthrough */
+    }
+  } else if (rowsEqual(db[field], valid)) {
+    // Ничего не изменилось — не трогаем стор, чтобы не перерисовывать всё приложение.
+    return
+  }
   mutate((d) => {
     switch (name) {
       case 'tours':
@@ -154,16 +185,13 @@ function applyTransport(name: string, rows: unknown[]) {
         d.bookings = valid as DB['bookings']
         break
       case 'users':
-        d.users = valid as DB['users']
+        d.users = (valid as DB['users']).map((u) => ({ ...u, blocked: u.avatar === BLOCK_AVATAR }))
         break
       case 'notifications':
         d.notifications = valid as DB['notifications']
         break
       case 'favorites':
-        d.favorites = (valid as { userId: string; tourId: string }[]).reduce<Record<string, string[]>>((acc, r) => {
-          ;(acc[r.userId] ??= []).push(r.tourId)
-          return acc
-        }, {})
+        d.favorites = next as DB['favorites']
         break
     }
   })
@@ -446,8 +474,63 @@ export function deleteNews(id: string) {
 }
 
 export function pushUser(user: DB['users'][number]) {
-  pushRow('users', user)
+  const { blocked, ...rest } = user as DB['users'][number] & { blocked?: boolean }
+  pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : rest.avatar ?? null })
 }
+
+export function isUserBlocked(user: { avatar?: string; blocked?: boolean }): boolean {
+  return user.blocked === true || user.avatar === BLOCK_AVATAR
+}
+
+export function toggleUserBlock(id: string): boolean {
+  let blocked = false
+  mutate((d) => {
+    const u = d.users.find((x) => x.id === id)
+    if (!u) return
+    u.blocked = !u.blocked
+    blocked = Boolean(u.blocked)
+  })
+  const updated = getDB().users.find((x) => x.id === id)
+  if (updated) pushUser(updated)
+  return blocked
+}
+
+export async function deleteUser(id: string) {
+  if (supabase) {
+    try {
+      await supabase.from('bookings').update({ userId: null } as never).eq('userId', id)
+    } catch {
+      /* ignore */
+    }
+    try {
+      await supabase.from('reviews').update({ userId: null } as never).eq('userId', id)
+    } catch {
+      /* ignore */
+    }
+    try {
+      await supabase.from('notifications').delete().eq('userId', id)
+    } catch {
+      /* ignore */
+    }
+    try {
+      await supabase.from('favorites').delete().eq('userId', id)
+    } catch {
+      /* ignore */
+    }
+    try {
+      await supabase.from('users').delete().eq('id', id)
+    } catch {
+      /* ignore */
+    }
+  }
+  mutate((d) => {
+    d.users = d.users.filter((x) => x.id !== id)
+    delete d.favorites[id]
+    d.notifications = d.notifications.filter((n) => n.userId !== id)
+  })
+}
+
+const BLOCK_AVATAR = 'BLOCKED'
 
 export async function resetDemoData() {
   if (supabase) {
