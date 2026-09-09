@@ -1,0 +1,287 @@
+TOTAL: 51
+FOUND 26 slugs: 26
+
+=== 12805 | Таджикистан: 8 дней от Памирских вершин до древних сокровищ
+slug: tadzhikistan-8-dnej-ot-pamirskih-vershin-do-drevnih-sokrovishh
+permalink: https://shohintour.com/tours/tadzhikistan-8-dnej-ot-pamirskih-vershin-do-drevnih-sokrovishh
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 4083 headings: 10 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/j3t0jsd21j5u7k96nlvs7fmilsbimu2k.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/e5536dfe72-3-g.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/tadzhikistan-—-dvorecz-navruz-tajemb.kiev_.ua-1-scaled.jpg
+
+=== 12752 | Активный отдых в горах Таджикистана
+slug: aktivnyj-otdyh-v-gorah-tadzhikistana
+permalink: https://shohintour.com/tours/aktivnyj-otdyh-v-gorah-tadzhikistana
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 1737 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/1030568994_0_158_3001_1846_1920x0_80_0_0_9c327a769db7ed3f0cff1d0f9d74f758-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/safed2.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/xy49we0pony3kz54gl0v1dww1322uiee.jpg
+
+=== 12739 | Памир: дорогами легенд и высокогорных чудес
+slug: pamir-dorogami-legend-i-vysokogornyh-chudes
+permalink: https://shohintour.com/tours/pamir-dorogami-legend-i-vysokogornyh-chudes
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 4275 headings: 10 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/pamir-2-768x576-1.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/garm-chashma_bassejn.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/khorog_botanical_garden_16.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/005_0_a3e2f_1a037975_orig-e1763620952124.jpg
+
+=== 12714 | 10-дневный тур на Памирский тракт
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3330 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[5]: https://shohintour.com/wp-content/uploads/2025/11/2021-03-02.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/1597026_original.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/pamir-highway-road-mountains-tajikistan_149326-488.avif
+    https://shohintour.com/wp-content/uploads/2025/11/photo_2023-03-15_16-30-00.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/pamir-trakt.jpg
+
+=== 12712 | Аджина-Тепе: древние сокровища Хатлонской Области
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-2
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-2
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3554 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/ajina-tepa-2.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/a423c57b99d079dbdca8dabbc67264de.webp
+    https://shohintour.com/wp-content/uploads/2025/11/drzjwnskjhoxc60n4zf0asz6mlk2q2ca.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/kurgan-tyube-bohtar-bibihonum-sovremennyj-pamyatnik-istorii-goroda-165010306.webp
+
+=== 12701 | Путешествие по Северному Шелковому пути
+slug: puteshestvie-po-severnomu-shelkovomu-puti
+permalink: https://shohintour.com/tours/puteshestvie-po-severnomu-shelkovomu-puti
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3668 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[6]: https://shohintour.com/wp-content/uploads/2025/11/kok-gumbaz3.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/slide_ny08.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/hazrat-i-shah-mosque-3.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/11218625_1000.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/rudaki-mausoleum-748x600-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/353796.jpg
+
+=== 12691 | Тур по городам Великого Шелкового Пути
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3902 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[5]: https://shohintour.com/wp-content/uploads/2025/11/11.-pod-czitadelyu-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/pendzhikent-tadzhikistan-maya-larki-na-bazare-v-pendzhikente-kioski-223559189.webp
+    https://shohintour.com/wp-content/uploads/2025/11/khaft-kul-7-ozer-doliny-shing-2.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/hissar-fortress1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/hissar-fortress.jpg
+
+=== 12660 | Озеро Тимур-Дара: бирюзовая жемчужина Таджикистана
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3973 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/1566403341132613110.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/national-park-shirkent-landschaft-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/parki-tabiii-tarihii-shirkent-5.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/caption-1.jpg
+
+=== 12659 | Белое ущелье: всесезонный горнолыжный комплекс Сафед-Дара
+slug: beloe-ushhele-vsesezonnyj-gornolyzhnyj-kompleks-safed-dara
+permalink: https://shohintour.com/tours/beloe-ushhele-vsesezonnyj-gornolyzhnyj-kompleks-safed-dara
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3133 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[5]: https://shohintour.com/wp-content/uploads/2025/11/y61b4tbkfmec8aln3xk3fc620pnmmnvo.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/514_98378_1458569323_0.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/safed-dara.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/1030568994_0_158_3001_1846_1920x0_80_0_0_9c327a769db7ed3f0cff1d0f9d74f758.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/accommodation-facilities.jpg
+
+=== 12657 | Памир – Крыша мира: от озера Зарошкуль до пика Карла Маркса
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 5790 headings: 11 calendarDays: 0 dayWordMatches: 0 includes: true excludes: true
+images[5]: https://shohintour.com/wp-content/uploads/2025/11/bartang.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/gornyy-badakhshan_69.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/01.-po-goronu-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/museum-of-antiquities1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/museum-of-antiquities2.jpg
+
+=== 12655 | Сказочная долина Фанских Гор: тур на выходные
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 4447 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/be2afcf4-3e44-4107-a089-c37d12b7151d.webp
+    https://shohintour.com/wp-content/uploads/2025/11/a22b8630ae-1-g.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/6b865db3-11d8-4da8-b226-b1f4b4632fd6_1_105_c.jpeg
+
+=== 12653 | Кристальные озера и заоблачные вершины: восхождения на пик Энергия (5 120 м) и пик Замок (5 070 м)
+slug: shablon-dlya-kopirovaniya-kopirovat-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 5717 headings: 12 calendarDays: 0 dayWordMatches: 0 includes: true excludes: true
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/508d96a77f00010126d59e3622404a19-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/57034_3008ab4e.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/p14-e1763100792292.jpg
+
+=== 12651 | Весь Таджикистан: Путешествие в Царство Памирских Гор
+slug: shablon-dlya-kopirovaniya-kopirovat
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 5153 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[6]: https://shohintour.com/wp-content/uploads/2025/11/photo-34-e1763102948799.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/00.-vvodnyj-kadr_1184670.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/fann_mountains_-_lake-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/istaravshan_004.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/dostoprimechatelnosti-dushanbe.webp
+    https://shohintour.com/wp-content/uploads/2025/11/img_0285-scaled.jpg
+
+=== 12643 | Восхождение на &#8220;корону&#8221; Памира: пик Коммунизма (Сомони) (7495 м)
+slug: voshozhdenie-na-koronu-pamira-pik-kommunizma-somoni-7495-m
+permalink: https://shohintour.com/tours/voshozhdenie-na-koronu-pamira-pik-kommunizma-somoni-7495-m
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 5959 headings: 12 calendarDays: 0 dayWordMatches: 0 includes: true excludes: true
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/222_pik_ismoila_somoni.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/pik-lenina2016-usovich-13.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/f_6.jpg
+
+=== 12632 | Восхождение на пик Корженевской
+slug: voshozhdenie-na-pik-korzhenevskoj
+permalink: https://shohintour.com/tours/voshozhdenie-na-pik-korzhenevskoj
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 5754 headings: 11 calendarDays: 0 dayWordMatches: 0 includes: true excludes: true
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/whatsapp-image-2021-07-09-at-12.15.11.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/moskvina-1-1.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/peak_korzhenevskoy_4.jpg
+
+=== 12626 | Путешествие по Древнему Таджикистану
+slug: puteshestvie-po-drevnemu-tadzhikistanu
+permalink: https://shohintour.com/tours/puteshestvie-po-drevnemu-tadzhikistanu
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3712 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/e46b26df-816b-4d3c-a760-c7e1e435a8a2.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/39e3c0a8de79e4b332cec7494d8ebc3c.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/image-24.png
+    https://shohintour.com/wp-content/uploads/2025/11/qalai-hisor.jpg
+
+=== 12624 | Душанбе &#8211; обзорная экскурсия
+slug: shablon-dlya-kopirovaniya
+permalink: https://shohintour.com/tours/shablon-dlya-kopirovaniya
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 4470 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[7]: https://shohintour.com/wp-content/uploads/2025/11/tadzhikistan-—-dvorecz-navruz-tajemb.kiev_.ua_-scaled.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/tajik-dishes.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/07hjh0g7wlswc0rh9nw8ghxb40ci1n67.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/158.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/park-state-flag-of-tajikistan.webp
+    https://shohintour.com/wp-content/uploads/2025/11/image-1.png
+    https://shohintour.com/wp-content/uploads/2025/11/e0bu618pa1yd2dgp6qwxq3q9c0oirdbz.jpg
+
+=== 12585 | Пик Энергия: Горный вызов в сердце Фанских гор
+slug: pik-energiya-gornyj-vyzov-v-serdcze-fanskih-gor
+permalink: https://shohintour.com/tours/pik-energiya-gornyj-vyzov-v-serdcze-fanskih-gor
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3775 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/pik-energiya-5-120-m-i-pik-zamok-5-070-m-.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/509f44857f00010133ed60b6e07e492a.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/i8lyxy86qswo15gprhjsgepb5u02ud6o-1.jpg
+
+=== 12581 | Фанские горы и Самарканд: Путешествие к жемчужинам Памира и Великого Шелкового пути
+slug: fanskie-gory-i-samarkand-puteshestvie-k-zhemchuzhinam-pamira-i-velikogo-shelkovogo-puti
+permalink: https://shohintour.com/tours/fanskie-gory-i-samarkand-puteshestvie-k-zhemchuzhinam-pamira-i-velikogo-shelkovogo-puti
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3327 headings: 9 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/uzbekistan-7.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/g0otzduw1ki.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/i8lyxy86qswo15gprhjsgepb5u02ud6o.jpg
+
+=== 12577 | 15 озёр Фанских гор: лазурное ожерелье
+slug: 15-ozyor-fanskih-gor-lazurnoe-ozherele
+permalink: https://shohintour.com/tours/15-ozyor-fanskih-gor-lazurnoe-ozherele
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 1910 headings: 10 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/gfgx1xuuiv3xxcrtfvl0x6augouwtczr.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/muaaagl6o-a-960.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/167560.jpg
+
+=== 12570 | Однодневный тур в Темурдара
+slug: odnodnevnyj-tur-v-temurdara
+permalink: https://shohintour.com/tours/odnodnevnyj-tur-v-temurdara
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 1177 headings: 1 calendarDays: 0 dayWordMatches: 0 includes: true excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/0jn2s0clu2rni97ke7wei62arhnaptx3.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/1677905579_1zoom-club-p-ozero-timurdara-9.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/caption.jpg
+
+=== 12566 | 6-дневный тур Пенджикент — Душанбе
+slug: 6-dnevnyj-tur-pendzhikent-dushanbe
+permalink: https://shohintour.com/tours/6-dnevnyj-tur-pendzhikent-dushanbe
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3494 headings: 12 calendarDays: 0 dayWordMatches: 0 includes: true excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/10-07-jwb8ce-tsentralnaya-sobornaya-mechet.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/1.-mizhgon-lake-seven-lakes.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/w3d4aphhpd8nukgak1sodq561tm5w7mu.jpg
+
+=== 12560 | 5-дневный тур в Таджикистан
+slug: 5-dnevnyj-tur-v-tadzhikistan
+permalink: https://shohintour.com/tours/5-dnevnyj-tur-v-tadzhikistan
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 3002 headings: 10 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[3]: https://shohintour.com/wp-content/uploads/2025/11/3868_2-e1762852786351.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/665448721a935661448bc188.640x480.jpeg
+    https://shohintour.com/wp-content/uploads/2025/11/17.-road-along-yagnob-valley.jpg
+
+=== 12553 | 5-дневный тур по маршруту Худжанд — Истаравшан — Пенджикент
+slug: 5-dnevnyj-tur-po-marshrutu-hudzhand-istaravshan-pendzhikent
+permalink: https://shohintour.com/tours/5-dnevnyj-tur-po-marshrutu-hudzhand-istaravshan-pendzhikent
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 2492 headings: 6 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/c47384e6-20ef-4bac-9902-289d9dfd8f51.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/mug-teppe.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/b657b92804-11-g.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/ovq1lk9n6gckttbt5pj9w.jpeg
+
+=== 12544 | Памирский тракт: джип-тур в сердце высоких гор и древней истории
+slug: napravleniya-dlya-otdyha-v-turczii-kopirovat
+permalink: https://shohintour.com/tours/napravleniya-dlya-otdyha-v-turczii-kopirovat
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 7863 headings: 6 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/11/glav-14.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/ruiny-zamka-yamchun-vahanskij-koridor-v-doline-gornobadakhshan-tadzhikistana-189199396.webp
+    https://shohintour.com/wp-content/uploads/2025/11/karakul.jpg
+    https://shohintour.com/wp-content/uploads/2025/11/dna3h3v1ubs1eow59j5je3r18vkybibp.jpg
+
+=== 12510 | Направления для отдыха в Турции
+slug: napravleniya-dlya-otdyha-v-turczii
+permalink: https://shohintour.com/tours/napravleniya-dlya-otdyha-v-turczii
+price: 79 TJS
+rating: 0 reviews: 0
+descLen: 2317 headings: 3 calendarDays: 0 dayWordMatches: 0 includes: false excludes: false
+images[4]: https://shohintour.com/wp-content/uploads/2025/10/Turkey.jpg
+    https://shohintour.com/wp-content/uploads/2024/08/Cover-13.png
+    https://shohintour.com/wp-content/uploads/2024/08/Cover-14.png
+    https://shohintour.com/wp-content/uploads/2024/08/Cover-15.png

@@ -87,6 +87,8 @@ export interface Tour {
   featured?: boolean
   isNew?: boolean
   active?: boolean
+  sourceUrl?: string
+  priceNote?: Localized
   createdAt: string
 }
 

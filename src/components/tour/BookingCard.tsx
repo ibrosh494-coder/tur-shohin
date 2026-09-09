@@ -68,6 +68,9 @@ export function BookingCard({ tour }: { tour: Tour }) {
             {t('offers.save')} {tour.discountPercent}%
           </p>
         )}
+        {tour.priceNote && (
+          <p className="mt-2 text-xs leading-relaxed text-white/70">{tour.priceNote[lang] || tour.priceNote.ru}</p>
+        )}
       </div>
 
       <div className="space-y-5 p-6">
@@ -89,6 +92,14 @@ export function BookingCard({ tour }: { tour: Tour }) {
               </button>
             ))}
           </div>
+          {tour.startDates.length === 0 && (
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="input-base mt-2 w-full"
+            />
+          )}
         </div>
 
         <div>
@@ -172,6 +183,16 @@ export function BookingCard({ tour }: { tour: Tour }) {
             <Clock3 className="h-3.5 w-3.5 text-pine-500" /> Отмена до 7 дней
           </span>
         </div>
+        {tour.sourceUrl && (
+          <a
+            href={tour.sourceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block text-center text-[11px] font-semibold text-pine-700 underline-offset-2 hover:underline"
+          >
+            Источник: shohintour.com
+          </a>
+        )}
       </div>
     </div>
   )

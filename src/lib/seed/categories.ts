@@ -51,6 +51,13 @@ export const categories: Category[] = [
     image: 'https://images.unsplash.com/photo-1509023464722-18d996393ca8',
   },
   {
+    id: 'cat-silk-road',
+    slug: 'silk-road',
+    name: { ru: 'Шёлковый путь', tj: 'Роҳи абрешим', en: 'Silk Road' },
+    icon: 'Compass',
+    image: 'https://images.unsplash.com/photo-1524231757912-21f4fe3a7200',
+  },
+  {
     id: 'cat-international',
     slug: 'international',
     name: { ru: 'Международные', tj: 'Байналмилалӣ', en: 'International' },

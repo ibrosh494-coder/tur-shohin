@@ -83,7 +83,12 @@ export function mutate(fn: (draft: DB) => void) {
 }
 
 export function getTour(idOrSlug: string): Tour | undefined {
-  return db.tours.find((t) => t.id === idOrSlug || t.slug === idOrSlug)
+  const t = db.tours.find((x) => x.id === idOrSlug || x.slug === idOrSlug)
+  if (!t) return t
+  // Поля происхождения не хранятся в БД — подмешиваем из сида (сид всегда зеркало каталога).
+  const s = tours.find((x) => x.id === t.id)
+  if (s) return { ...t, sourceUrl: s.sourceUrl, priceNote: s.priceNote }
+  return t
 }
 
 export function getActiveTours(): Tour[] {
@@ -267,7 +272,13 @@ function settle(p: PromiseLike<unknown>) {
 /** Прямая запись строки в облако (upsert). Ошибки игнорируем — локально всё работает. */
 export function pushRow(table: TableName, row: object) {
   if (!supabase) return
-  settle(supabase.from(table).upsert(row).select().single())
+  const rec = { ...(row as Record<string, unknown>) }
+  if (table === 'tours') {
+    // Поля-происхождения не имеют колонок в tours — не отправляем их в БД.
+    delete rec.sourceUrl
+    delete rec.priceNote
+  }
+  settle(supabase.from(table).upsert(rec).select().single())
 }
 
 /** Прямое удаление строки из облака. */

@@ -30,7 +30,13 @@ let ok = 0
 let fail = 0
 for (const [table, rows] of catalog) {
   for (const row of rows) {
-    const { error } = await supabase.from(table).upsert(row)
+    const rec = { ...(row as Record<string, unknown>) }
+    if (table === 'tours') {
+      // Поля-происхождения не имеют колонок в tours — убираем из тела вставки.
+      delete rec.sourceUrl
+      delete rec.priceNote
+    }
+    const { error } = await supabase.from(table).upsert(rec)
     if (error) {
       fail++
       console.error(`  ${table} :: ${row.id} :: ${error.message}`)
@@ -40,5 +46,33 @@ for (const [table, rows] of catalog) {
   }
   console.log(`${table}: ${rows.length} rows pushed`)
 }
+
+// Каталог туров в облаке должен строго соответствовать сиду:
+// удаляем старые строки, которых больше нет в tours.ts (иначе останутся выдуманные демо-туры).
+// Если на тур ссылаются внешние ключи (bookings/favorites) — каскадно снимаем их и удаляем.
+const tourIds = new Set(tours.map((t) => t.id))
+const { data: existingTours, error: existingErr } = await supabase.from('tours').select('id')
+if (existingErr) console.error(`tours: select existing failed :: ${existingErr.message}`)
+let removed = 0
+for (const r of existingTours ?? []) {
+  if (tourIds.has(r.id)) continue
+  const { error } = await supabase.from('tours').delete().eq('id', r.id)
+  if (!error) {
+    removed++
+    continue
+  }
+  await supabase.from('bookings').delete().eq('tourId', r.id)
+  await supabase.from('favorites').delete().eq('tourId', r.id)
+  await supabase.from('reviews').delete().eq('tourId', r.id)
+  const retry = await supabase.from('tours').delete().eq('id', r.id)
+  if (!retry.error) {
+    removed++
+    console.log(`  tours :: stale ${r.id} removed (cascaded deps)`)
+  } else {
+    fail++
+    console.error(`  tours :: stale ${r.id} :: ${retry.error.message}`)
+  }
+}
+console.log(`tours: ${removed} stale rows removed`)
 console.log(`Done. ok=${ok} fail=${fail}`)
 process.exit(fail ? 1 : 0)
