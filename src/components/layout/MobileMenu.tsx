@@ -4,6 +4,7 @@ import { X, Heart, User, Sparkles } from 'lucide-react'
 import { useApp } from '../../lib/AppContext'
 import { useAuth } from '../../lib/auth'
 import { cn } from '../ui'
+import { Logo } from './Logo'
 
 const NAV = [
   { key: 'nav.home', to: '/' },
@@ -39,7 +40,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
             className="fixed inset-y-0 right-0 z-[70] flex w-[86%] max-w-sm flex-col bg-white"
           >
             <div className="flex h-16 items-center justify-between border-b border-graphite-100 px-5">
-              <span className="font-display text-xl font-bold text-graphite-900">ТУР ШОХИН</span>
+              <Logo variant="dark" className="h-8 md:h-8" />
               <button onClick={onClose} aria-label="Закрыть" className="grid h-10 w-10 place-items-center rounded-full hover:bg-graphite-100">
                 <X className="h-5 w-5" />
               </button>

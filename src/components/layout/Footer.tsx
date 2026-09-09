@@ -3,6 +3,7 @@ import { Phone, Mail, MapPin, Send, MessageCircle } from 'lucide-react'
 import { useApp } from '../../lib/AppContext'
 import { SITE } from '../../config/site'
 import { cn } from '../ui'
+import { Logo } from './Logo'
 
 const LINKS = [
   { key: 'nav.home', to: '/' },
@@ -28,9 +29,8 @@ export function Footer() {
     <footer className="border-t border-graphite-100 bg-graphite-950 pb-24 text-graphite-300 md:pb-0">
       <div className="container-x grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-4">
         <div>
-          <div className="flex items-center gap-2.5">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-pine-600 font-display text-lg font-bold text-white">ТШ</span>
-            <span className="font-display text-xl font-bold text-white">ТУР ШОХИН</span>
+          <div className="flex items-center">
+            <Logo variant="light" />
           </div>
           <p className="mt-4 max-w-xs text-sm leading-relaxed text-graphite-400">{t('ft.desc')}</p>
         </div>

@@ -12,10 +12,15 @@ export function BookingCard({ tour }: { tour: Tour }) {
   const { user } = useAuth()
   const navigate = useNavigate()
   const unit = tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice
+  const maxTravelers = Math.max(1, tour.groupSizeMax || 1)
 
   const [date, setDate] = useState(tour.startDates[0] ?? '')
   const [travelers, setTravelers] = useState(1)
   const [extras, setExtras] = useState<Record<string, number>>({})
+
+  const changeTravelers = (delta: number) => {
+    setTravelers((prev) => Math.min(maxTravelers, Math.max(1, prev + delta)))
+  }
 
   const toggleExtra = (id: string) => {
     setExtras((prev) => {
@@ -43,7 +48,7 @@ export function BookingCard({ tour }: { tour: Tour }) {
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="relative card overflow-hidden">
       <div className="bg-gradient-to-br from-pine-700 to-pine-900 px-6 py-5 text-white">
         <div className="flex items-end justify-between">
           <div>
@@ -90,23 +95,37 @@ export function BookingCard({ tour }: { tour: Tour }) {
           <label className="label flex items-center gap-1.5">
             <Users className="h-3.5 w-3.5" /> {t('td.travelers')}
           </label>
-          <div className="flex items-center gap-3 rounded-2xl border border-graphite-200 px-4 py-3">
+          <div className="isolate relative z-10 flex items-center gap-3 rounded-2xl border border-graphite-200 px-4 py-3 select-none">
             <button
-              onClick={() => setTravelers((v) => Math.max(tour.groupSizeMin || 1, v - 1))}
-              className="grid h-9 w-9 place-items-center rounded-full bg-graphite-100 font-bold text-graphite-700 transition-colors hover:bg-graphite-200 active:scale-95"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                changeTravelers(-1)
+              }}
+              disabled={travelers <= 1}
+              aria-label="Меньше"
+              aria-disabled={travelers <= 1}
+              className="grid h-11 w-11 touch-manipulation place-items-center rounded-full bg-graphite-100 font-bold text-graphite-700 transition-colors hover:bg-graphite-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Minus className="h-4 w-4" />
+              <Minus className="h-4 w-4 pointer-events-none" />
             </button>
             <span className="flex-1 text-center text-lg font-extrabold text-graphite-900">{travelers}</span>
             <button
-              onClick={() => setTravelers((v) => Math.min(tour.groupSizeMax, v + 1))}
-              className="grid h-9 w-9 place-items-center rounded-full bg-graphite-100 font-bold text-graphite-700 transition-colors hover:bg-graphite-200 active:scale-95"
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                changeTravelers(1)
+              }}
+              disabled={travelers >= maxTravelers}
+              aria-label="Больше"
+              aria-disabled={travelers >= maxTravelers}
+              className="grid h-11 w-11 touch-manipulation place-items-center rounded-full bg-graphite-100 font-bold text-graphite-700 transition-colors hover:bg-graphite-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-4 w-4 pointer-events-none" />
             </button>
           </div>
           <p className="mt-1.5 text-xs text-graphite-400">
-            {tour.groupSizeMin}–{tour.groupSizeMax} {t('td.groupOf')}
+            {t('td.groupOf')}: 1–{maxTravelers}
           </p>
         </div>
 

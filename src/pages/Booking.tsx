@@ -31,7 +31,8 @@ export default function Booking() {
   const [date, setDate] = useState(params.get('date') || tour?.startDates[0] || '')
   const [travelers, setTravelers] = useState(() => {
     const p = Number(params.get('pax'))
-    return !isNaN(p) && p >= 1 ? p : 1
+    const max = Math.max(1, tour?.groupSizeMax || 1)
+    return !isNaN(p) ? Math.min(max, Math.max(1, p)) : 1
   })
   const [extras, setExtras] = useState<Record<string, number>>(() => {
     const out: Record<string, number> = {}
@@ -166,15 +167,33 @@ export default function Booking() {
                     </div>
 
                     <label className="label mt-8">{t('td.travelers')}</label>
-                    <div className="flex w-fit items-center gap-4 rounded-2xl border border-graphite-200 px-4 py-3">
-                      <button onClick={() => setTravelers((v) => Math.max(tour.groupSizeMin || 1, v - 1))} className="grid h-10 w-10 place-items-center rounded-full bg-graphite-100 font-bold hover:bg-graphite-200 active:scale-95">
-                        <Minus className="h-4 w-4" />
+                    <div className="isolate relative z-10 flex w-fit items-center gap-4 rounded-2xl border border-graphite-200 px-4 py-3 select-none">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setTravelers((v) => Math.min(Math.max(1, tour.groupSizeMax || 1), Math.max(1, v - 1)))
+                        }}
+                        disabled={travelers <= 1}
+                        aria-label="Меньше"
+                        className="grid h-11 w-11 touch-manipulation place-items-center rounded-full bg-graphite-100 font-bold hover:bg-graphite-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <Minus className="h-4 w-4 pointer-events-none" />
                       </button>
                       <span className="min-w-10 text-center text-xl font-extrabold text-graphite-900">{travelers}</span>
-                      <button onClick={() => setTravelers((v) => Math.min(tour.groupSizeMax, v + 1))} className="grid h-10 w-10 place-items-center rounded-full bg-graphite-100 font-bold hover:bg-graphite-200 active:scale-95">
-                        <Plus className="h-4 w-4" />
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setTravelers((v) => Math.min(Math.max(1, tour.groupSizeMax || 1), v + 1))
+                        }}
+                        disabled={travelers >= Math.max(1, tour.groupSizeMax || 1)}
+                        aria-label="Больше"
+                        className="grid h-11 w-11 touch-manipulation place-items-center rounded-full bg-graphite-100 font-bold hover:bg-graphite-200 active:scale-95 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <Plus className="h-4 w-4 pointer-events-none" />
                       </button>
-                      <span className="text-xs text-graphite-400">мин. {tour.groupSizeMin}</span>
+                      <span className="text-xs text-graphite-400">мин. 1</span>
                     </div>
 
                     {tour.extras.length > 0 && (

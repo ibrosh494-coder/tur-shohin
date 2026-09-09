@@ -1,11 +1,12 @@
 export const SITE = {
-  name: 'ТУР ШОХИН',
-  url: 'https://turshohin.tj',
-  email: 'hello@turshohin.tj',
-  phone: '+992 90 000 00 00',
-  whatsapp: '+992 90 000 00 00',
-  telegram: '@turshohin',
-  address: 'г. Душанбе, ул. Рудаки 14',
+  name: 'Шохин Тур',
+  url: 'https://shohintour.com',
+  email: 'info@shohintour.com',
+  phone: '+992 93 470 0096',
+  whatsapp: '+992 93 470 0096',
+  telegram: '@shohintour',
+  address: 'г. Худжанд, ул. Исмоили Сомони, д. 14',
+  hours: 'Пн-Сб с 9:00 до 18:00',
 }
 
 export const CURRENCY_RATES = {

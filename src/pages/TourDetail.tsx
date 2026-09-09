@@ -264,7 +264,7 @@ export default function TourDetail() {
             </div>
           </div>
 
-          <aside className="lg:sticky lg:top-24 lg:self-start">
+          <aside className="relative lg:sticky lg:top-24 lg:z-20 lg:self-start">
             <BookingCard tour={tour} />
           </aside>
         </div>

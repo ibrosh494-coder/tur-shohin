@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-Sitemap: https://turshohin.tj/sitemap.xml
+Sitemap: https://tur-shohin.vercel.app/sitemap.xml

@@ -6,6 +6,7 @@ import { useApp } from '../../lib/AppContext'
 import { useAuth } from '../../lib/auth'
 import { cn } from '../ui'
 import { getDB, getNotifications } from '../../lib/store'
+import { Logo } from './Logo'
 
 const NAV = [
   { key: 'nav.home', to: '/' },
@@ -229,17 +230,8 @@ export function Header({ menuOpen, onMenuToggle }: { menuOpen: boolean; onMenuTo
       )}
     >
       <div className="container-x flex h-16 items-center gap-2 md:h-[72px] md:gap-6">
-        <Link to="/" className="flex shrink-0 items-center gap-2.5">
-          <span
-            className={cn(
-              'grid h-9 w-9 place-items-center rounded-xl bg-pine-600 font-display text-lg font-bold text-white shadow-glow md:h-10 md:w-10',
-            )}
-          >
-            ТШ
-          </span>
-          <span className={cn('hidden font-display text-lg font-bold tracking-wide lg:block', solid ? 'text-graphite-900' : 'text-white')}>
-            ТУР ШОХИН
-          </span>
+        <Link to="/" className="flex shrink-0 items-center" aria-label="Шохин Тур — на главную">
+          <Logo variant={solid ? 'dark' : 'white'} />
         </Link>
 
         <nav className="ml-4 hidden items-center gap-1 lg:flex">

@@ -4,9 +4,10 @@ dist
 .env.local
 .env.*.local
 .vercel
-*.png
-*.jpg
 *.log
 .DS_Store
 .vscode
 .idea
+.env*
+/Снимок экрана*.png
+/Screenshot*.png

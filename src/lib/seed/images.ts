@@ -1,3 +1,22 @@
+// Оригинальные фотографии «Шохин Тур» (shohintour.com), скачаны в /public/images/original.
+export const ORI = {
+  active: '/images/original/1030568994_0_158_3001_1846_1920x0_80_0_0_9c327a769db7ed3f0cff1d0f9d74f758-1.jpg',
+  silkCity: '/images/original/11.-pod-czitadelyu-1.jpg',
+  timurLake: '/images/original/1566403341132613110.jpg',
+  pamirTrakt: '/images/original/2021-03-02.jpeg',
+  ajina: '/images/original/ajina-tepa-2.jpg',
+  egypt: '/images/original/egypt-1.jpg',
+  china: '/images/original/hangzhou11.jpg',
+  turkey: '/images/original/istanbul_turkey_houses_marinas_ships_evening_514146_1080x1920.jpg',
+  pamirRoof: '/images/original/j3t0jsd21j5u7k96nlvs7fmilsbimu2k.jpg',
+  kokGumbaz: '/images/original/kok-gumbaz3.jpg',
+  pamirMount: '/images/original/pamir_mountains_tajikistan-1024x683-1.jpg',
+  pamirTrek: '/images/original/pamir-2-768x576-1.jpeg',
+  village: '/images/original/y61b4tbkfmec8aln3xk3fc620pnmmnvo.jpg',
+  dushanbe: '/images/original/dushanbe-tajikistan-getty.webp',
+  slider: '/images/original/Slider-2.jpg',
+} as const
+
 // Стабильные фотографии (Unsplash). Все ссылки проверены на доступность.
 export const IMG = {
   peak: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4',

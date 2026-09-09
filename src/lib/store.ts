@@ -6,7 +6,7 @@ import { reviews as seedReviews } from './seed/reviews'
 import { gallery, news } from './seed/galleryNews'
 import { supabase } from './supabase'
 
-const DB_KEY = 'turshohin_db_v1'
+const DB_KEY = 'turshohin_db_v2'
 
 function uid(prefix: string) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
