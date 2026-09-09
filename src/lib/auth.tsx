@@ -49,6 +49,11 @@ async function hashSeedPasswords() {
     hash: u.id === 'admin-demo' ? 'admin123' : 'user123',
   }))
   for (const w of withHash) {
+    // Если аккаунт уже есть в облаке (email/пароль могли поменять) — не затираем демо-данными.
+    if (supabase) {
+      const { data } = await supabase.from('users').select('email').eq('id', w.id).maybeSingle()
+      if (data?.email) continue
+    }
     const hash = await sha256(w.hash)
     mutate((d) => {
       const u = d.users.find((x) => x.id === w.id)
