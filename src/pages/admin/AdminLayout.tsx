@@ -1,8 +1,6 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
-import { LayoutDashboard, Route, ClipboardList, Star, Newspaper, ArrowLeft, RotateCcw } from 'lucide-react'
+import { LayoutDashboard, Route, ClipboardList, Star, Newspaper, ArrowLeft } from 'lucide-react'
 import { useApp } from '../../lib/AppContext'
-import { resetDemoData } from '../../lib/store'
-import { useToast } from '../../lib/toast'
 import { cn } from '../../components/ui'
 
 const NAV = [
@@ -15,7 +13,6 @@ const NAV = [
 
 export default function AdminLayout() {
   const { t } = useApp()
-  const toast = useToast()
 
   return (
     <div className="grid min-h-[100svh] bg-graphite-50/70 pt-20 lg:grid-cols-[240px_1fr]">
@@ -40,17 +37,6 @@ export default function AdminLayout() {
           ))}
         </nav>
         <div className="space-y-2">
-          <button
-            onClick={() => {
-              if (confirm('Сбросить все данные к демо-версии?')) {
-                resetDemoData()
-                toast.toast('Данные сброшены', 'info')
-              }
-            }}
-            className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-graphite-500 hover:bg-graphite-100"
-          >
-            <RotateCcw className="h-4 w-4" /> Сбросить демо
-          </button>
           <Link to="/" className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-bold text-graphite-500 hover:bg-graphite-100">
             <ArrowLeft className="h-4 w-4" /> {t('bk.back')} на сайт
           </Link>

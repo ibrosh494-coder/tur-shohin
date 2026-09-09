@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, User as UserIcon, Phone, KeyRound } from 'lucide-react'
+import { Mail, Lock, User as UserIcon, Phone } from 'lucide-react'
 import { Seo } from '../lib/seo'
 import { useApp } from '../lib/AppContext'
 import { useAuth } from '../lib/auth'
@@ -148,13 +148,6 @@ export default function Auth() {
                 {loading ? t('auth.sending') : mode === 'forgot' ? t('auth.sending') : mode === 'login' ? t('auth.signIn') : t('auth.signUp')}
               </Button>
             </form>
-
-            <div className="mt-6 rounded-2xl border border-sand-200 bg-sand-50 p-4 text-left">
-              <p className="mb-1 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-sand-700">
-                <KeyRound className="h-3.5 w-3.5" /> {t('auth.demo')}
-              </p>
-              <p className="text-xs leading-relaxed text-sand-800">{t('auth.demoHint')}</p>
-            </div>
           </div>
         </motion.div>
       </section>
