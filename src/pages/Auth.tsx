@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { Mail, Lock, User as UserIcon, Phone } from 'lucide-react'
+import { Mail, Lock, User as UserIcon, Phone, KeyRound } from 'lucide-react'
 import { Seo } from '../lib/seo'
 import { useApp } from '../lib/AppContext'
 import { useAuth } from '../lib/auth'
@@ -10,7 +10,7 @@ import { cn, Button } from '../components/ui'
 
 export default function Auth() {
   const { t } = useApp()
-  const { login, register, resetPassword } = useAuth()
+  const { login, register, resetPassword, confirmResetPassword } = useAuth()
   const toast = useToast()
   const navigate = useNavigate()
   const location = useLocation()
@@ -18,7 +18,8 @@ export default function Auth() {
 
   const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login')
   const [loading, setLoading] = useState(false)
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
+  const [sent, setSent] = useState(false)
+  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', code: '' })
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -54,11 +55,21 @@ export default function Auth() {
       } else {
         toast.toast(res.error ?? 'Ошибка', 'error')
       }
-    } else {
+    } else if (!sent) {
       const res = await resetPassword(form.email)
       if (res.ok && res.token) {
-        toast.toast(`${t('auth.checkEmail')} ${res.token}`)
+        setSent(true)
+        toast.toast(`Код сброса: ${res.token} — введите его ниже вместе с новым паролем`, 'info')
+      } else {
+        toast.toast(res.error ?? 'Ошибка', 'error')
+      }
+    } else {
+      const res = await confirmResetPassword(form.email, form.code, form.password)
+      if (res.ok) {
+        toast.toast('Пароль обновлён — войдите с новым паролем')
+        setSent(false)
         setMode('login')
+        setForm((f) => ({ ...f, code: '', password: '' }))
       } else {
         toast.toast(res.error ?? 'Ошибка', 'error')
       }
@@ -86,13 +97,13 @@ export default function Auth() {
 
             <div className="mb-6 grid grid-cols-2 rounded-full bg-graphite-100 p-1">
               <button
-                onClick={() => setMode('login')}
+                onClick={() => { setMode('login'); setSent(false) }}
                 className={cn('rounded-full py-2 text-sm font-bold transition-colors', mode === 'login' ? 'bg-white text-graphite-900 shadow-soft' : 'text-graphite-500')}
               >
                 {t('auth.login')}
               </button>
               <button
-                onClick={() => setMode('register')}
+                onClick={() => { setMode('register'); setSent(false) }}
                 className={cn('rounded-full py-2 text-sm font-bold transition-colors', mode === 'register' ? 'bg-white text-graphite-900 shadow-soft' : 'text-graphite-500')}
               >
                 {t('auth.register')}
@@ -126,6 +137,25 @@ export default function Auth() {
                     <input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} className="input-base pl-11" placeholder="+992 90 000 00 00" />
                   </div>
                 </div>
+              )}
+
+              {mode === 'forgot' && sent && (
+                <>
+                  <div>
+                    <label className="label text-graphite-500">Код из уведомления</label>
+                    <div className="relative">
+                      <KeyRound className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-graphite-400" />
+                      <input value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className="input-base pl-11" placeholder="AB12CD" />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="label text-graphite-500">Новый пароль</label>
+                    <div className="relative">
+                      <Lock className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-graphite-400" />
+                      <input value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} className="input-base pl-11" type="password" placeholder="минимум 6 символов" />
+                    </div>
+                  </div>
+                </>
               )}
 
               {mode !== 'forgot' && (

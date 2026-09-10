@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role, User } from '../types'
-import { mutate, getDB, pushUser, isUserBlocked, hashPassword } from './store'
+import { mutate, getDB, pushUser, isUserBlocked, hashPassword, setUserPassword } from './store'
 import { supabase } from './supabase'
 
 export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2 }
@@ -13,6 +13,7 @@ export function canAccess(role: Role, min: number): boolean {
 export const ACCESS = { staff: 1, users: 2 } as const
 
 const SESSION_KEY = 'turshohin_session'
+const RESET_KEY = 'turshohin_reset'
 
 function ensureSeedUsers() {
   if (getDB().users.length === 0) {
@@ -73,6 +74,7 @@ interface AuthState {
   register: (input: { name: string; email: string; phone?: string; password: string }) => Promise<{ ok: boolean; error?: string }>
   logout: () => void
   resetPassword: (email: string) => Promise<{ ok: boolean; error?: string; token?: string }>
+  confirmResetPassword: (email: string, token: string, password: string) => Promise<{ ok: boolean; error?: string }>
   updateProfile: (patch: Partial<User>) => Promise<void>
 }
 
@@ -172,22 +174,48 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }, [])
 
-  const resetPassword = useCallback(async (email: string) => {
+const resetPassword = useCallback(async (email: string) => {
     const target = email.trim().toLowerCase()
-    let found: boolean
+    let found: User | undefined
     if (supabase) {
       try {
-        const { data } = await supabase.from('users').select('id').eq('email', target).maybeSingle()
-        found = !!data
+        const { data } = await supabase.from('users').select('*').eq('email', target).maybeSingle()
+        found = (data as User) ?? getDB().users.find((u) => u.email.toLowerCase() === target)
       } catch {
-        found = false
+        found = getDB().users.find((u) => u.email.toLowerCase() === target)
       }
     } else {
-      found = !!getDB().users.find((u) => u.email.toLowerCase() === target)
+      found = getDB().users.find((u) => u.email.toLowerCase() === target)
     }
     if (!found) return { ok: false, error: 'Пользователь не найден' }
     const token = Math.random().toString(36).slice(2, 8).toUpperCase()
+    localStorage.setItem(RESET_KEY, JSON.stringify({ email: target, token, expires: Date.now() + 15 * 60 * 1000 }))
     return { ok: true, token }
+  }, [])
+
+  const confirmResetPassword = useCallback(async (email: string, token: string, password: string) => {
+    const target = email.trim().toLowerCase()
+    const pw = password.trim()
+    if (pw.length < 6) return { ok: false, error: 'Пароль минимум 6 символов' }
+    let rec: { email?: string; token?: string; expires?: number } | null = null
+    try {
+      rec = JSON.parse(localStorage.getItem(RESET_KEY) ?? 'null') as { email?: string; token?: string; expires?: number } | null
+    } catch {
+      rec = null
+    }
+    if (!rec) return { ok: false, error: 'Код не запрашивался' }
+    if (rec.email !== target || rec.token !== token.trim().toUpperCase()) {
+      return { ok: false, error: 'Неверный код' }
+    }
+    if (!rec.expires || Date.now() > rec.expires) {
+      localStorage.removeItem(RESET_KEY)
+      return { ok: false, error: 'Код истёк — запросите заново' }
+    }
+    const user = getDB().users.find((u) => u.email.toLowerCase() === target)
+    if (!user) return { ok: false, error: 'Пользователь не найден' }
+    await setUserPassword(user.id, pw)
+    localStorage.removeItem(RESET_KEY)
+    return { ok: true }
   }, [])
 
   const updateProfile = useCallback(async (patch: Partial<User>) => {
@@ -203,9 +231,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(updated)
   }, [user])
 
-  const value = useMemo(
-    () => ({ user, login, register, logout, resetPassword, updateProfile }),
-    [user, login, register, logout, resetPassword, updateProfile],
+const value = useMemo(
+    () => ({ user, login, register, logout, resetPassword, confirmResetPassword, updateProfile }),
+    [user, login, register, logout, resetPassword, confirmResetPassword, updateProfile],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
