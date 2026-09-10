@@ -95,6 +95,17 @@ export function getActiveTours(): Tour[] {
   return db.tours.filter((t) => t.active !== false)
 }
 
+/** Цена тура за человека за весь тур: 79 смн/день × длительность тура. */
+export function tourFullPrice(t: Pick<Tour, 'basePrice' | 'durationDays'>): number {
+  return Math.round(t.basePrice * Math.max(1, t.durationDays))
+}
+
+/** Итоговая цена тура за человека с учётом скидки. */
+export function tourPrice(t: Tour): number {
+  const full = tourFullPrice(t)
+  return t.discountPercent ? Math.round(full * (1 - t.discountPercent / 100)) : full
+}
+
 // ---------------------------------------------------------------------------
 // Supabase-синхронизация
 // Локальное хранилище остаётся мгновенным «кэшем»: каждая мутация пишется в
@@ -297,7 +308,7 @@ export function createBooking(draft: BookingDraft): Booking | null {
   const tour = getTour(draft.tourId)
   if (!tour) return null
 
-  const price = tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice
+  const price = tourPrice(tour)
   const extras = (draft.extras || [])
     .filter((e) => e.qty > 0)
     .map((e) => {

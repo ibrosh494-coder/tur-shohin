@@ -75,9 +75,9 @@ function parseIncludesExcludes(desc) {
 
 const createdAt = '2025-11-20T00:00:00.000Z';
 const priceNote = {
-  ru: 'Цена указана как на shohintour.com — «от 79 смн» (плейсхолдер, требует уточнения у оператора).',
-  tj: 'Нарх тибқи shohintour.com — «аз 79 сомонӣ» (муваққатӣ, бо оператор тасдиқ карда шавад).',
-  en: 'Price as shown on shohintour.com — "from 79 somoni" (placeholder, to be confirmed).',
+  ru: 'Цена по сайту Shohin Tour — «от 79 смн» в день (плейсхолдер). Итог тура: 79 смн × N дней × туристы. Реальные цены уточняйте у оператора.',
+  tj: 'Нарх тибқи сайти Shohin Tour — «аз 79 сомонӣ» дар як рӯз (муваққатӣ). Ҳисоб: 79 × шумораи рӯзҳо × сайёҳон. Нархи воқеиро бо оператор тасдиқ кунед.',
+  en: 'Price per site Shohin Tour — "from 79 somoni" per day (placeholder). Total: 79 × duration × travelers. Real prices to be confirmed.',
 };
 
 const entries = tours.map((t, i) => {

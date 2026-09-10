@@ -6,12 +6,13 @@ import { useApp } from '../../lib/AppContext'
 import { useAuth } from '../../lib/auth'
 import { cn, Price, Button } from '../ui'
 import { formatDate } from '../../lib/hooks'
+import { tourPrice, tourFullPrice } from '../../lib/store'
 
 export function BookingCard({ tour }: { tour: Tour }) {
   const { t, lang } = useApp()
   const { user } = useAuth()
   const navigate = useNavigate()
-  const unit = tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice
+  const unit = tourPrice(tour)
   const maxTravelers = Math.max(1, tour.groupSizeMax || 1)
 
   const [date, setDate] = useState(tour.startDates[0] ?? '')
@@ -54,7 +55,7 @@ export function BookingCard({ tour }: { tour: Tour }) {
           <div>
             {tour.discountPercent && (
               <p className="text-sm text-white/60 line-through">
-                <Price tjs={tour.basePrice} bold={false} />
+                <Price tjs={tourFullPrice(tour)} bold={false} />
               </p>
             )}
             <p className="font-display text-3xl font-bold">

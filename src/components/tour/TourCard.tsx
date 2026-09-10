@@ -5,7 +5,7 @@ import type { Tour } from '../../types'
 import { useApp } from '../../lib/AppContext'
 import { useAuth } from '../../lib/auth'
 import { useToast } from '../../lib/toast'
-import { toggleFavorite } from '../../lib/store'
+import { toggleFavorite, tourPrice, tourFullPrice } from '../../lib/store'
 import { cn, Rating, Price, SmartImage, useDBState } from './helpers'
 
 export function FavoriteHeart({ tourId, className }: { tourId: string; className?: string }) {
@@ -44,7 +44,7 @@ export function FavoriteHeart({ tourId, className }: { tourId: string; className
 
 export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
   const { t, lang } = useApp()
-  const price = tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice
+  const price = tourPrice(tour)
 
   return (
     <motion.article
@@ -93,7 +93,7 @@ export function TourCard({ tour, index = 0 }: { tour: Tour; index?: number }) {
             <div>
               {tour.discountPercent ? (
                 <p className="text-xs text-graphite-400 line-through">
-                  <Price tjs={tour.basePrice} bold={false} />
+                  <Price tjs={tourFullPrice(tour)} bold={false} />
                 </p>
               ) : null}
               <p className="text-sm font-semibold text-graphite-500">

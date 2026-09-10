@@ -7,6 +7,7 @@ import { useApp } from '../lib/AppContext'
 import { useDB, loc } from '../lib/hooks'
 import { cn, Button, Price, CategoryIcon } from '../components/ui'
 import { TourCard } from '../components/tour/TourCard'
+import { tourPrice } from '../lib/store'
 
 type SortKey = 'popular' | 'cheap' | 'expensive' | 'rating' | 'new'
 const SORTS: SortKey[] = ['popular', 'cheap', 'expensive', 'rating', 'new']
@@ -44,7 +45,7 @@ export default function Tours() {
   }
 
   const countries = useMemo(() => Array.from(new Set(db.tours.map((t) => t.country))).sort(), [db.tours])
-  const maxPrice = useMemo(() => Math.max(...db.tours.map((t) => t.basePrice), 1000), [db.tours])
+  const maxPrice = useMemo(() => Math.max(...db.tours.map((tr) => tourPrice(tr)), 1000), [db.tours])
 
   const results = useMemo(() => {
     let list = db.tours.filter((tr) => tr.active !== false)
@@ -59,7 +60,7 @@ export default function Tours() {
     if (dur === 'd1') list = list.filter((tr) => tr.durationDays <= 3)
     if (dur === 'd2') list = list.filter((tr) => tr.durationDays >= 4 && tr.durationDays <= 7)
     if (dur === 'd3') list = list.filter((tr) => tr.durationDays >= 8)
-    if (priceMax) list = list.filter((tr) => tr.basePrice <= Number(priceMax))
+    if (priceMax) list = list.filter((tr) => tourPrice(tr) <= Number(priceMax))
     if (q.trim()) {
       const s = q.trim().toLowerCase()
       list = list.filter(
@@ -71,7 +72,7 @@ export default function Tours() {
       )
     }
 
-    const price = (tr?: (typeof db.tours)[number]) => (tr && tr.discountPercent ? tr.basePrice * (1 - tr.discountPercent / 100) : tr?.basePrice ?? 0)
+    const price = (tr?: (typeof db.tours)[number]) => (tr ? tourPrice(tr) : 0)
 
     switch (sortKey) {
       case 'cheap':

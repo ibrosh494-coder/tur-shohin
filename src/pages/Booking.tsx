@@ -6,7 +6,7 @@ import { Seo } from '../lib/seo'
 import { useApp } from '../lib/AppContext'
 import { useAuth } from '../lib/auth'
 import { useDB, formatDate } from '../lib/hooks'
-import { createBooking } from '../lib/store'
+import { createBooking, tourPrice } from '../lib/store'
 import { sendTelegramNotification } from '../lib/telegram'
 import { useToast } from '../lib/toast'
 import { cn, Button, Price, SmartImage } from '../components/ui'
@@ -49,7 +49,7 @@ export default function Booking() {
     comment: '',
   })
 
-  const unit = useMemo(() => (tour && tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour?.basePrice ?? 0), [tour])
+  const unit = useMemo(() => (tour ? tourPrice(tour) : 0), [tour])
 
   if (!tour) {
     return (

@@ -5,7 +5,7 @@ import type { Tour } from '../../types'
 import { useApp } from '../../lib/AppContext'
 import { useAuth } from '../../lib/auth'
 import { useDB, formatDate } from '../../lib/hooks'
-import { addReview } from '../../lib/store'
+import { addReview, tourPrice } from '../../lib/store'
 import { useToast } from '../../lib/toast'
 import { cn, Button, Rating, SmartImage, Price } from '../ui'
 
@@ -149,7 +149,7 @@ function TourCardMini({ tour, index }: { tour: Tour; index: number }) {
           <div className="mt-2 flex items-center justify-between">
             <Rating value={tour.rating} size="sm" />
             <span className="text-sm font-bold text-pine-700">
-              <Price tjs={tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice} />
+              <Price tjs={tourPrice(tour)} />
             </span>
           </div>
         </div>

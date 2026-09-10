@@ -5,6 +5,7 @@ import { useApp } from '../lib/AppContext'
 import { useAuth } from '../lib/auth'
 import { getFavorites } from '../lib/store'
 import { Price, Rating, SmartImage, SectionHeader } from '../components/ui'
+import { tourPrice } from '../lib/store'
 import { FavoriteHeart } from '../components/tour/TourCard'
 
 export default function Favorites() {
@@ -44,7 +45,7 @@ export default function Favorites() {
                     <h3 className="line-clamp-1 font-display font-semibold text-graphite-900">{tour.title[lang] || tour.title.ru}</h3>
                     <div className="mt-2 flex items-center justify-between">
                       <Rating value={tour.rating} count={tour.reviewsCount} size="sm" />
-                      <Price tjs={tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice} />
+                      <Price tjs={tourPrice(tour)} />
                     </div>
                   </div>
                 </Link>

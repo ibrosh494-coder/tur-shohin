@@ -5,7 +5,7 @@ import { Seo } from '../lib/seo'
 import { useApp } from '../lib/AppContext'
 import { useAuth } from '../lib/auth'
 import { useDB, formatDate } from '../lib/hooks'
-import { updateBookingStatus, getNotifications, markNotificationsRead, getFavorites } from '../lib/store'
+import { updateBookingStatus, getNotifications, markNotificationsRead, getFavorites, tourPrice } from '../lib/store'
 import { cn, Button, StatusBadge, Price, SmartImage, Rating } from '../components/ui'
 import { useToast } from '../lib/toast'
 import { FavoriteHeart } from '../components/tour/TourCard'
@@ -155,7 +155,7 @@ export default function Account() {
                         </Link>
                         <div className="mt-2 flex items-center justify-between">
                           <Rating value={tour.rating} size="sm" />
-                          <Price tjs={tour.discountPercent ? tour.basePrice * (1 - tour.discountPercent / 100) : tour.basePrice} />
+                          <Price tjs={tourPrice(tour)} />
                         </div>
                       </div>
                     </div>
