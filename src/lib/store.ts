@@ -336,7 +336,7 @@ function settle(p: PromiseLike<unknown>) {
 }
 
 /** Прямая запись строки в облако (upsert). Ошибки игнорируем — локально всё работает. */
-export function pushRow(table: TableName, row: object) {
+export async function pushRow(table: TableName, row: object): Promise<void> {
   if (!supabase) return
   const rec = { ...(row as Record<string, unknown>) }
   if (table === 'tours') {
@@ -344,13 +344,21 @@ export function pushRow(table: TableName, row: object) {
     delete rec.sourceUrl
     delete rec.priceNote
   }
-  settle(supabase.from(table).upsert(rec).select().single())
+  try {
+    await supabase.from(table).upsert(rec).select().single()
+  } catch {
+    /* локально всё работает */
+  }
 }
 
 /** Прямое удаление строки из облака. */
-export function pushDelete(table: TableName, id: string) {
+export async function pushDelete(table: TableName, id: string): Promise<void> {
   if (!supabase) return
-  settle(supabase.from(table).delete().eq('id', id))
+  try {
+    await supabase.from(table).delete().eq('id', id)
+  } catch {
+    /* локально всё работает */
+  }
 }
 
 function genBookingNumber() {
@@ -550,10 +558,10 @@ export function deleteNews(id: string) {
   pushDelete('news', id)
 }
 
-export function pushUser(user: DB['users'][number]) {
+export async function pushUser(user: DB['users'][number]): Promise<void> {
   const { blocked, avatar, ...rest } = user as DB['users'][number] & { blocked?: boolean }
   const realAvatar = avatar && avatar !== BLOCK_AVATAR ? avatar : null
-  pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : realAvatar })
+  await pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : realAvatar })
 }
 
 export function isUserBlocked(user: { avatar?: string; blocked?: boolean }): boolean {
@@ -573,15 +581,26 @@ export async function setUserPassword(id: string, plain: string): Promise<boolea
   const password = plain.trim()
   if (!password) return false
   const { hash, salt } = await hashPassword(password)
+
+  let base: DB['users'][number] | undefined
+  try {
+    base = getDB().users.find((x) => x.id === id)
+  } catch { /* */ }
+  if (!base && supabase) {
+    try {
+      const { data } = await supabase.from('users').select('*').eq('id', id).maybeSingle()
+      if (data) base = data as DB['users'][number]
+    } catch { /* */ }
+  }
+  if (!base) return false
+
+  const updated: DB['users'][number] = { ...base, passwordHash: hash, salt }
   mutate((d) => {
-    const u = d.users.find((x) => x.id === id)
-    if (u) {
-      u.passwordHash = hash
-      u.salt = salt
-    }
+    const idx = d.users.findIndex((x) => x.id === id)
+    if (idx >= 0) d.users[idx] = updated
+    else d.users.push(updated)
   })
-  const updated = getDB().users.find((x) => x.id === id)
-  if (updated) pushUser(updated)
+  await pushUser(updated)
   return true
 }
 

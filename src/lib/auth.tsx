@@ -147,31 +147,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(async (email: string, password: string) => {
     const target = email.trim().toLowerCase()
-    let found: User | undefined
+    let supBase: User | undefined
     if (supabase) {
       try {
         const { data } = await supabase.from('users').select('*').eq('email', target).maybeSingle()
-        found = (data as User) ?? getDB().users.find((u) => u.email.toLowerCase() === target)
-      } catch {
-        found = getDB().users.find((u) => u.email.toLowerCase() === target)
+        if (data) supBase = data as User
+      } catch { /* */ }
+    }
+    const local = getDB().users.find((u) => u.email.toLowerCase() === target)
+
+    // Supabase — источник истины, но сразу после сброса пароля локальная копия
+    // может быть новее (если запись в Supabase ещё не прошла или упала молча).
+    // Поэтому проверяем оба источника пароля.
+    for (const cand of [supBase, local].filter(Boolean) as User[]) {
+      if (!cand.passwordHash) continue
+      if (await verifyPassword(password, cand.passwordHash, cand.salt)) {
+        if (isUserBlocked(cand)) {
+          return { ok: false, error: 'Аккаунт заблокирован администратором' }
+        }
+        const session = toSession(cand)
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+        setSessionUser(cand)
+        return { ok: true }
       }
-    } else {
-      found = getDB().users.find((u) => u.email.toLowerCase() === target)
     }
-    if (!found || !found.passwordHash) {
-      return { ok: false, error: 'Неверный email или пароль' }
-    }
-    const valid = await verifyPassword(password, found.passwordHash, found.salt)
-    if (!valid) {
-      return { ok: false, error: 'Неверный email или пароль' }
-    }
-    if (isUserBlocked(found)) {
-      return { ok: false, error: 'Аккаунт заблокирован администратором' }
-    }
-    const session = toSession(found)
-    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
-    setSessionUser(found)
-    return { ok: true }
+    return { ok: false, error: 'Неверный email или пароль' }
   }, [])
 
   const register = useCallback(async (input: { name: string; email: string; phone?: string; password: string }) => {
@@ -251,9 +251,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(RESET_KEY)
       return { ok: false, error: 'Код истёк — запросите заново' }
     }
-    const u = getDB().users.find((x) => x.email.toLowerCase() === target)
-    if (!u) return { ok: false, error: 'Пользователь не найден' }
-    await setUserPassword(u.id, pw)
+    let targetId: string | undefined
+    const loc = getDB().users.find((x) => x.email.toLowerCase() === target)
+    if (loc) targetId = loc.id
+    if (!targetId && supabase) {
+      try {
+        const { data } = await supabase.from('users').select('id').eq('email', target).maybeSingle()
+        targetId = (data as { id?: string } | null)?.id
+      } catch { /* */ }
+    }
+    if (!targetId) return { ok: false, error: 'Пользователь не найден' }
+    const changed = await setUserPassword(targetId, pw)
+    if (!changed) return { ok: false, error: 'Не удалось изменить пароль' }
     localStorage.removeItem(RESET_KEY)
     return { ok: true }
   }, [])
