@@ -496,8 +496,10 @@ export function deleteNews(id: string) {
 }
 
 export function pushUser(user: DB['users'][number]) {
-  const { blocked, ...rest } = user as DB['users'][number] & { blocked?: boolean }
-  pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : rest.avatar ?? null })
+  const { blocked, avatar, ...rest } = user as DB['users'][number] & { blocked?: boolean }
+  // Маркер блокировки живёт в avatar. Настоящая аватарка — только не-BLOCKED значение.
+  const realAvatar = avatar && avatar !== BLOCK_AVATAR ? avatar : null
+  pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : realAvatar })
 }
 
 export function isUserBlocked(user: { avatar?: string; blocked?: boolean }): boolean {
