@@ -3,8 +3,8 @@ import { SITE } from '../config/site'
 
 /**
  * Отправка уведомления менеджеру в Telegram.
- * Приоритет: VITE_TELEGRAM_WEBHOOK (рекомендуется — через Supabase Edge Function),
- * затем прямой вызов bot API (VITE_TELEGRAM_BOT_TOKEN + VITE_TELEGRAM_CHAT_ID).
+ * Все запросы идут через серверный прокси (Vercel /api/telegram),
+ * чтобы токен бота никогда не попадал в клиентский бандл.
  * Если переменные не заданы — безопасно пропускает (демо-режим).
  */
 
@@ -13,23 +13,27 @@ interface TelegramPayload {
   buttons?: { text: string; url: string }[]
 }
 
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
 function buildMessage(booking: Booking, tour: Tour): TelegramPayload {
   const text = [
     '🆕 НОВАЯ ЗАЯВКА',
     '',
-    `🏕 Тур: <b>${tour.title.ru}</b>`,
-    `📅 Дата: ${booking.date}`,
+    `🏕 Тур: <b>${escapeHtml(tour.title.ru)}</b>`,
+    `📅 Дата: ${escapeHtml(booking.date)}`,
     `👥 Людей: ${booking.travelers}`,
-    `👤 Имя: ${booking.name}`,
-    `📞 Телефон: ${booking.phone}`,
-    `📧 Email: ${booking.email}`,
-    booking.comment ? `💬 Комментарий: ${booking.comment}` : '',
+    `👤 Имя: ${escapeHtml(booking.name)}`,
+    `📞 Телефон: ${escapeHtml(booking.phone)}`,
+    `📧 Email: ${escapeHtml(booking.email)}`,
+    booking.comment ? `💬 Комментарий: ${escapeHtml(booking.comment)}` : '',
     booking.extras.length
-      ? `➕ Доп. услуги: ${booking.extras.map((e) => `${e.name} ×${e.qty}`).join(', ')}`
+      ? `➕ Доп. услуги: ${booking.extras.map((e) => `${escapeHtml(e.name)} ×${e.qty}`).join(', ')}`
       : '',
     '',
     `💰 Итоговая стоимость: ${booking.totalPrice.toLocaleString('ru-RU')} сомони`,
-    `🆔 № ${booking.bookingNumber}`,
+    `🆔 № ${escapeHtml(booking.bookingNumber)}`,
   ]
     .filter(Boolean)
     .join('\n')
@@ -43,34 +47,16 @@ function buildMessage(booking: Booking, tour: Tour): TelegramPayload {
 export async function sendTelegramNotification(booking: Booking, tour: Tour): Promise<boolean> {
   const payload = buildMessage(booking, tour)
   const webhook = import.meta.env.VITE_TELEGRAM_WEBHOOK as string | undefined
-  const token = import.meta.env.VITE_TELEGRAM_BOT_TOKEN as string | undefined
-  const chatId = import.meta.env.VITE_TELEGRAM_CHAT_ID as string | undefined
+
+  if (!webhook) return false
 
   try {
-    if (webhook) {
-      const res = await fetch(webhook, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      })
-      return res.ok
-    }
-    if (token && chatId) {
-      const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text: payload.text,
-          parse_mode: 'HTML',
-          disable_web_page_preview: true,
-          reply_markup: {
-            inline_keyboard: payload.buttons?.map((b) => [{ text: b.text, url: b.url }]),
-          },
-        }),
-      })
-      return res.ok
-    }
+    const res = await fetch(webhook, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+    return res.ok
   } catch {
     /* не блокируем бронирование при сбое уведомления */
   }

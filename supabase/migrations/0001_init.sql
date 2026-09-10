@@ -1,28 +1,12 @@
--- Тур Шохин — schema for the Supabase-backed deployment.
--- The app works both in demo mode (localStorage) and with Supabase enabled:
--- the store writes the SAME row objects to these tables (camelCase columns).
--- ВАЖНО: camelCase-имена колонок обязаны быть в двойных кавычках, иначе
--- Postgres приводит их к нижнему регистру и приложение не находит колонки.
-
+-- Тур Шохин — migration 0001: initial schema + RLS.
 -- ВАЖНО: если вы УЖЕ запускали старую версию этой миграции, сначала удалите
--- старые таблицы. Вставьте и выполните в SQL Editor:
---   drop table if exists public.bookings cascade;
---   drop table if exists public.reviews cascade;
---   drop table if exists public.notifications cascade;
---   drop table if exists public.users cascade;
---   drop table if exists public.gallery cascade;
---   drop table if exists public.news cascade;
---   drop table if exists public.destinations cascade;
---   drop table if exists public.categories cascade;
---   drop table if exists public.tours cascade;
---   drop table if exists public.favorites cascade;
--- Затем выполните этот файл заново.
+-- старые таблицы (см. комментарий в setup_full.sql).
 
 -- Каталог (статические справочники)
 create table if not exists public.categories (
   id   text primary key,
   slug text not null unique,
-  name jsonb not null,           -- { ru, tj, en }
+  name jsonb not null,
   icon text,
   image text
 );
@@ -88,19 +72,21 @@ create table if not exists public.news (
   date    date not null
 );
 
--- Пользователи (собственная авторизация по SHA-256, как в демо-режиме)
+-- Пользователи (собственная авторизация)
 create table if not exists public.users (
   id            text primary key,
   email         text not null unique,
   name          text not null,
   phone         text,
-  role          text not null default 'user' check (role in ('user', 'admin')),
+  role          text not null default 'user' check (role in ('user', 'manager', 'admin')),
   avatar        text,
+  blocked       boolean not null default false,
   "passwordHash" text,
+  "salt"        text,
   "createdAt"   date not null default current_date
 );
 
--- Избранное: одна строка на пару (пользователь, тур)
+-- Избранное
 create table if not exists public.favorites (
   "userId" text not null,
   "tourId" text not null,
@@ -140,7 +126,7 @@ create table if not exists public.reviews (
   "createdAt" date not null default current_date
 );
 
--- Уведомления пользователя (о бронированиях, статусах)
+-- Уведомления
 create table if not exists public.notifications (
   id         text primary key,
   "userId"   text references public.users(id) on delete cascade,
@@ -156,7 +142,77 @@ create index if not exists idx_bookings_status on public.bookings (status);
 create index if not exists idx_reviews_tour    on public.reviews ("tourId");
 create index if not exists idx_notifications_user on public.notifications ("userId");
 
--- Realtime для всех таблиц (ошибку «уже добавлена» игнорируем)
+-- ============================================================================
+-- ROW LEVEL SECURITY
+-- ============================================================================
+
+alter table public.categories    enable row level security;
+alter table public.destinations  enable row level security;
+alter table public.tours         enable row level security;
+alter table public.gallery       enable row level security;
+alter table public.news          enable row level security;
+alter table public.users         enable row level security;
+alter table public.bookings      enable row level security;
+alter table public.reviews       enable row level security;
+alter table public.notifications enable row level security;
+alter table public.favorites     enable row level security;
+
+-- Каталог — публичное чтение, запись для инициализации
+create policy "catalog_read"    on public.categories   for select using (true);
+create policy "catalog_insert"  on public.categories   for insert with check (true);
+create policy "catalog_update"  on public.categories   for update using (true);
+create policy "catalog_delete"  on public.categories   for delete using (true);
+
+create policy "catalog_read"    on public.destinations for select using (true);
+create policy "catalog_insert"  on public.destinations for insert with check (true);
+create policy "catalog_update"  on public.destinations for update using (true);
+create policy "catalog_delete"  on public.destinations for delete using (true);
+
+create policy "catalog_read"    on public.tours        for select using (true);
+create policy "catalog_insert"  on public.tours        for insert with check (true);
+create policy "catalog_update"  on public.tours        for update using (true);
+create policy "catalog_delete"  on public.tours        for delete using (true);
+
+create policy "catalog_read"    on public.gallery      for select using (true);
+create policy "catalog_insert"  on public.gallery      for insert with check (true);
+create policy "catalog_update"  on public.gallery      for update using (true);
+create policy "catalog_delete"  on public.gallery      for delete using (true);
+
+create policy "catalog_read"    on public.news         for select using (true);
+create policy "catalog_insert"  on public.news         for insert with check (true);
+create policy "catalog_update"  on public.news         for update using (true);
+create policy "catalog_delete"  on public.news         for delete using (true);
+
+-- Пользователи — чтение всем, запись для регистрации/обновления
+create policy "users_select"  on public.users for select using (true);
+create policy "users_insert"  on public.users for insert with check (true);
+create policy "users_update"  on public.users for update using (true);
+create policy "users_delete"  on public.users for delete using (true);
+
+-- Бронирования — чтение всех (для админки), запись для создания
+create policy "bookings_select"  on public.bookings for select using (true);
+create policy "bookings_insert"  on public.bookings for insert with check (true);
+create policy "bookings_update"  on public.bookings for update using (true);
+create policy "bookings_delete"  on public.bookings for delete using (true);
+
+-- Отзывы
+create policy "reviews_select"  on public.reviews for select using (true);
+create policy "reviews_insert"  on public.reviews for insert with check (true);
+create policy "reviews_update"  on public.reviews for update using (true);
+create policy "reviews_delete"  on public.reviews for delete using (true);
+
+-- Уведомления
+create policy "notifications_select" on public.notifications for select using (true);
+create policy "notifications_insert" on public.notifications for insert with check (true);
+create policy "notifications_update" on public.notifications for update using (true);
+create policy "notifications_delete" on public.notifications for delete using (true);
+
+-- Избранное
+create policy "favorites_select" on public.favorites for select using (true);
+create policy "favorites_insert" on public.favorites for insert with check (true);
+create policy "favorites_delete" on public.favorites for delete using (true);
+
+-- Realtime
 do $$
 begin
   alter publication supabase_realtime add table

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ShieldOff, ShieldCheck, Trash2, Search, KeyRound, Copy } from 'lucide-react'
+import { ShieldOff, ShieldCheck, Trash2, Search, KeyRound } from 'lucide-react'
 import { useDB } from '../../lib/hooks'
 import { useAuth } from '../../lib/auth'
 import { toggleUserBlock, deleteUser, setUserRole, setUserPassword } from '../../lib/store'
@@ -74,15 +74,6 @@ export default function ManageUsers() {
     toast.toast(ok ? 'Пароль обновлён — сообщите его пользователю' : 'Пароль не задан', ok ? 'success' : 'error')
   }
 
-  const onCopyHash = async (hash: string) => {
-    try {
-      await navigator.clipboard.writeText(hash)
-      toast.toast('Хэш пароля скопирован', 'success')
-    } catch {
-      toast.toast('Не удалось скопировать', 'error')
-    }
-  }
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -95,12 +86,11 @@ export default function ManageUsers() {
 
       <CardChunk>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[820px] border-collapse">
+          <table className="w-full min-w-[720px] border-collapse">
             <thead className="border-b border-graphite-100">
               <tr>
                 <th className={th}>Пользователь</th>
                 <th className={th}>Роль</th>
-                <th className={th}>Пароль</th>
                 <th className={th}>Регистрация</th>
                 <th className={th}>Брони</th>
                 <th className={th}>Статус</th>
@@ -108,7 +98,7 @@ export default function ManageUsers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-graphite-100">
-              {list.length === 0 && <EmptyRow colSpan={7} />}
+              {list.length === 0 && <EmptyRow colSpan={6} />}
               {list.map((u) => (
                 <tr key={u.id} className="hover:bg-graphite-50/60">
                   <td className={td}>
@@ -139,18 +129,6 @@ export default function ManageUsers() {
                         ))}
                       </select>
                     )}
-                  </td>
-                  <td className={td}>
-                    <span className="flex items-center gap-1.5">
-                      <code className="rounded bg-graphite-100 px-2 py-1 font-mono text-xs text-graphite-600" title={u.passwordHash}>
-                        {u.passwordHash ? `${u.passwordHash.slice(0, 10)}…` : '—'}
-                      </code>
-                      {u.passwordHash && (
-                        <button onClick={() => onCopyHash(u.passwordHash!)} title="Скопировать хэш" className="grid h-7 w-7 place-items-center rounded-lg text-graphite-400 transition-colors hover:bg-graphite-100 hover:text-graphite-700">
-                          <Copy className="h-3.5 w-3.5" />
-                        </button>
-                      )}
-                    </span>
                   </td>
                   <td className={td}>{u.createdAt}</td>
                   <td className={td}>

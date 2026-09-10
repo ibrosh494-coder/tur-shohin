@@ -1,23 +1,16 @@
-import type { GalleryItem, NewsItem } from '../../types'
+import type { GalleryItem, Localized, NewsItem } from '../../types'
 import { IMG } from './images'
 
+const T: Localized = { ru: '', tj: '', en: '' }
+
 export const gallery: GalleryItem[] = [
-  { id: 'g1', image: IMG.peak, title: { ru: 'Вершина на рассвете', tj: 'Қулла дар субҳ', en: 'Summit at dawn' }, category: 'pamir' },
-  { id: 'g2', image: IMG.lake, title: { ru: '12-е озеро Фанских гор', tj: 'Кӯли 12-ум', en: 'Twelfth Fann lake' }, category: 'fann' },
-  { id: 'g3', image: IMG.fog, title: { ru: 'Туман над Памиром', tj: 'Туман дар Помир', en: 'Fog over the Pamir' }, category: 'pamir' },
-  { id: 'g4', image: IMG.hiker, title: { ru: 'Трекер на тропе', tj: 'Пиёдагар', en: 'Hiker on the trail' }, category: 'adventure' },
-  { id: 'g5', image: IMG.cityN, title: { ru: 'Душанбе ночью', tj: 'Душанбе шабона', en: 'Dushanbe at night' }, category: 'dushanbe' },
-  { id: 'g6', image: IMG.green, title: { ru: 'Долина Гиссара', tj: 'Водии Ҳисор', en: 'Hissar valley' }, category: 'dushanbe' },
-  { id: 'g7', image: IMG.campfire, title: { ru: 'Костер в горах', tj: 'Оташ дар кӯҳ', en: 'Mountain campfire' }, category: 'adventure' },
-  { id: 'g8', image: IMG.yurt, title: { ru: 'Юрты в Мургабе', tj: 'Юртҳо', en: 'Yurts in Murghab' }, category: 'pamir' },
-  { id: 'g9', image: IMG.market, title: { ru: 'Рынок в Худжанде', tj: 'Бозор', en: 'Khujand bazaar' }, category: 'culture' },
-  { id: 'g10', image: IMG.ceremony, title: { ru: 'Национальный танец', tj: 'Рақси миллӣ', en: 'Folk dance' }, category: 'culture' },
-  { id: 'g11', image: IMG.tea, title: { ru: 'Чайная церемония', tj: 'Чойхона', en: 'Tea ceremony' }, category: 'culture' },
-  { id: 'g12', image: IMG.river, title: { ru: 'Река Фандарья', tj: 'Фандарё', en: 'Fandarya river' }, category: 'fann' },
-  { id: 'g13', image: IMG.blaze, title: { ru: 'Лагерь у подножия', tj: 'Лагери кӯҳ', en: 'Base camp' }, category: 'pamir' },
-  { id: 'g14', image: IMG.temple, title: { ru: 'Крепость Гиссар', tj: 'Қалъаи Ҳисор', en: 'Hissar fortress' }, category: 'culture' },
-  { id: 'g15', image: IMG.lakeBoat, title: { ru: 'Искандеркуль', tj: 'Искандаркӯл', en: 'Iskanderkul' }, category: 'fann' },
-  { id: 'g16', image: IMG.desert, title: { ru: 'Пустыня у Булкункуля', tj: 'Биёбон', en: 'Desert near Bulunkul' }, category: 'pamir' },
+  { id: 'g1', image: 'https://shohintour.com/wp-content/uploads/2025/12/c44a1a75-65fb-4bba-8cca-ff54cd57e53d_1_105_c-1.jpeg', title: T, category: 'pamir' },
+  { id: 'g2', image: 'https://shohintour.com/wp-content/uploads/2025/12/b1c0ff2d-bd87-41ab-834a-429f9ea15954_1_105_c.jpeg', title: T, category: 'fann' },
+  { id: 'g3', image: 'https://shohintour.com/wp-content/uploads/2025/12/94b45ed5-2ee8-413f-9ad9-6074f7663b83_1_105_c-1.jpeg', title: T, category: 'pamir' },
+  { id: 'g4', image: 'https://shohintour.com/wp-content/uploads/2025/12/3b3d889d-e108-4939-ae49-9401155dea59_1_105_c.jpeg', title: T, category: 'adventure' },
+  { id: 'g5', image: 'https://shohintour.com/wp-content/uploads/2025/12/587ca344-9bb6-410d-916c-e2740623c825_1_105_c.jpeg', title: T, category: 'culture' },
+  { id: 'g6', image: 'https://shohintour.com/wp-content/uploads/2025/12/554938b9-f923-4278-97e7-2410750440d5_1_105_c-1.jpeg', title: T, category: 'dushanbe' },
+  { id: 'g7', image: 'https://shohintour.com/wp-content/uploads/2025/12/1a1e9fe8-db89-4112-9a82-6551546d0b54_1_105_c.jpeg', title: T, category: 'adventure' },
 ]
 
 export const news: NewsItem[] = [

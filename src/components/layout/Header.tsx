@@ -14,7 +14,6 @@ const NAV = [
   { key: 'nav.destinations', to: '/tours?tab=dest' },
   { key: 'nav.about', to: '/about' },
   { key: 'nav.gallery', to: '/gallery' },
-  { key: 'nav.contact', to: '/contact' },
 ]
 
 const LANG_LABEL = { ru: '🇷🇺 RU', tj: '🇹🇯 TJ', en: '🇬🇧 EN' } as const

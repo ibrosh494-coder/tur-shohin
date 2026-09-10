@@ -74,5 +74,21 @@ for (const r of existingTours ?? []) {
   }
 }
 console.log(`tours: ${removed} stale rows removed`)
+
+// Галерея должна строго соответствовать сиду: чистим старые фото, которых больше нет.
+const galleryIds = new Set(gallery.map((g) => g.id))
+const { data: existingGallery, error: galleryErr } = await supabase.from('gallery').select('id')
+if (galleryErr) console.error(`gallery: select existing failed :: ${galleryErr.message}`)
+let removedGallery = 0
+for (const g of existingGallery ?? []) {
+  if (galleryIds.has(g.id)) continue
+  const { error } = await supabase.from('gallery').delete().eq('id', g.id)
+  if (!error) removedGallery++
+  else {
+    fail++
+    console.error(`  gallery :: stale ${g.id} :: ${error.message}`)
+  }
+}
+console.log(`gallery: ${removedGallery} stale rows removed`)
 console.log(`Done. ok=${ok} fail=${fail}`)
 process.exit(fail ? 1 : 0)

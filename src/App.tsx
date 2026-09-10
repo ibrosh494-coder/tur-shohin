@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
+import { ErrorBoundary } from './components/ErrorBoundary'
 import { ScrollToTop } from './lib/seo'
 import { useAuth, canAccess } from './lib/auth'
 import { useDB } from './lib/hooks'
@@ -15,7 +16,6 @@ import Booking from './pages/Booking'
 import Account from './pages/Account'
 import Favorites from './pages/Favorites'
 import Gallery from './pages/Gallery'
-import Contact from './pages/Contact'
 import NewsList from './pages/NewsList'
 import NewsDetail from './pages/NewsDetail'
 import Auth from './pages/Auth'
@@ -78,7 +78,7 @@ function RequireRole({ min, children }: { min: number; children: ReactNode }) {
 
 export default function App() {
   return (
-    <>
+    <ErrorBoundary>
       <ScrollToTop />
       <Routes>
         <Route element={<Layout />}>
@@ -96,7 +96,6 @@ export default function App() {
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/news" element={<NewsList />} />
           <Route path="/news/:slug" element={<NewsDetail />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="/auth" element={<Auth />} />
           <Route
@@ -168,6 +167,6 @@ export default function App() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-    </>
+    </ErrorBoundary>
   )
 }

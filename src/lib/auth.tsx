@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role, User } from '../types'
-import { mutate, getDB, pushUser, isUserBlocked, hashPassword, setUserPassword } from './store'
+import { mutate, getDB, pushUser, isUserBlocked, hashPassword, verifyPassword, setUserPassword } from './store'
 import { supabase } from './supabase'
 
 export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2 }
@@ -9,11 +9,31 @@ export function canAccess(role: Role, min: number): boolean {
   return (ROLE_RANK[role] ?? 0) >= min
 }
 
-/** Уровень доступа в админке: 1+ любые сотрудники (все разделы), 2+ пользователи (только админ). */
 export const ACCESS = { staff: 1, users: 2 } as const
 
 const SESSION_KEY = 'turshohin_session'
 const RESET_KEY = 'turshohin_reset'
+const SESSION_TTL_MS = 7 * 24 * 60 * 60 * 1000 // 7 дней
+
+/** Тип сессии — хранит только безопасные поля, НЕ пароль. */
+interface SessionData {
+  id: string
+  email: string
+  name: string
+  phone?: string
+  role: Role
+  avatar?: string
+  expiresAt: number
+}
+
+function toSession(u: User): SessionData {
+  const { passwordHash, salt, blocked, ...safe } = u
+  return { ...safe, expiresAt: Date.now() + SESSION_TTL_MS }
+}
+
+function isSessionValid(s: SessionData | null): s is SessionData {
+  return !!s && typeof s === 'object' && typeof s.id === 'string' && (!s.expiresAt || Date.now() < s.expiresAt)
+}
 
 function ensureSeedUsers() {
   if (getDB().users.length === 0) {
@@ -38,7 +58,6 @@ function ensureSeedUsers() {
       })
     })
   }
-  // хэши паролей вычисляем один раз и храним в сессии базы
   void hashSeedPasswords()
 }
 
@@ -48,21 +67,21 @@ async function hashSeedPasswords() {
   if (!seedHashes.length) return
   const withHash = seedHashes.map((u) => ({
     id: u.id,
-    hash: u.id === 'admin-demo' ? 'admin123' : 'user123',
+    pw: u.id === 'admin-demo' ? 'admin123' : 'user123',
   }))
   for (const w of withHash) {
-    // Если аккаунт уже есть в облаке (email/пароль могли поменять) — не затираем демо-данными.
     if (supabase) {
       const { data } = await supabase.from('users').select('email').eq('id', w.id).maybeSingle()
       if (data?.email) continue
     }
-    const hash = await hashPassword(w.hash)
+    const { hash, salt } = await hashPassword(w.pw)
     mutate((d) => {
       const u = d.users.find((x) => x.id === w.id)
-      if (u) u.passwordHash = hash
+      if (u) {
+        u.passwordHash = hash
+        u.salt = salt
+      }
     })
-    // Синхронизируем демо-аккаунты в облако (если Supabase включён),
-    // чтобы вход admin@turshohin.tj / user@turshohin.tj работал и в «не демо».
     const updated = getDB().users.find((x) => x.id === w.id)
     if (updated) pushUser(updated)
   }
@@ -81,28 +100,44 @@ interface AuthState {
 const AuthContext = createContext<AuthState>(null as unknown as AuthState)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
+  const [sessionUser, setSessionUser] = useState<User | null>(() => {
     try {
       const raw = localStorage.getItem(SESSION_KEY)
-      return raw ? (JSON.parse(raw) as User) : null
+      if (!raw) return null
+      const parsed = JSON.parse(raw) as SessionData | User
+      // Миграция: старый формат хранил весь User (с passwordHash).
+      if ('passwordHash' in parsed) {
+        const session = toSession(parsed as User)
+        localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+        return parsed as User
+      }
+      if (!isSessionValid(parsed as SessionData)) {
+        localStorage.removeItem(SESSION_KEY)
+        return null
+      }
+      // Восстанавливаем User из БД по id сессии (чтобы получить актуальные данные).
+      const dbUser = getDB().users.find((u) => u.id === (parsed as SessionData).id)
+      return dbUser ?? null
     } catch {
       return null
     }
   })
 
-  useMemo(() => {
+  // Обновляем user при изменении sessionUser
+  const user = sessionUser
+
+  useEffect(() => {
     ensureSeedUsers()
   }, [])
 
-  // Если админ заблокировал или удалил пользователя — принудительно выходим из сессии,
-  // даже если он сейчас на любой странице (не только в личном кабинете).
+  // Проверка блокировки/удаления + истечения сессии
   useEffect(() => {
     const check = () => {
       if (!user) return
       const cur = getDB().users.find((u) => u.id === user.id)
       if (!cur || isUserBlocked(cur)) {
         localStorage.removeItem(SESSION_KEY)
-        setUser(null)
+        setSessionUser(null)
       }
     }
     check()
@@ -118,21 +153,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const { data } = await supabase.from('users').select('*').eq('email', target).maybeSingle()
         found = (data as User) ?? getDB().users.find((u) => u.email.toLowerCase() === target)
       } catch {
-        // Сеть недоступна — вход по локальному кэшу.
         found = getDB().users.find((u) => u.email.toLowerCase() === target)
       }
     } else {
       found = getDB().users.find((u) => u.email.toLowerCase() === target)
     }
-    const hash = await hashPassword(password)
-    if (!found || found.passwordHash !== hash) {
+    if (!found || !found.passwordHash) {
+      return { ok: false, error: 'Неверный email или пароль' }
+    }
+    const valid = await verifyPassword(password, found.passwordHash, found.salt)
+    if (!valid) {
       return { ok: false, error: 'Неверный email или пароль' }
     }
     if (isUserBlocked(found)) {
       return { ok: false, error: 'Аккаунт заблокирован администратором' }
     }
-    localStorage.setItem(SESSION_KEY, JSON.stringify(found))
-    setUser(found)
+    const session = toSession(found)
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+    setSessionUser(found)
     return { ok: true }
   }, [])
 
@@ -149,7 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (exists?.data || getDB().users.some((u) => u.email.toLowerCase() === email)) {
       return { ok: false, error: 'Пользователь с таким email уже существует' }
     }
-    const hash = await hashPassword(input.password)
+    const { hash, salt } = await hashPassword(input.password)
     const created: User = {
       id: `user-${Date.now().toString(36)}`,
       email,
@@ -157,6 +195,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       phone: input.phone?.trim() || undefined,
       role: 'user',
       passwordHash: hash,
+      salt,
       createdAt: new Date().toISOString().slice(0, 10),
     }
     mutate((d) => {
@@ -164,17 +203,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       d.favorites[created.id] = []
     })
     pushUser(created)
-    localStorage.setItem(SESSION_KEY, JSON.stringify(created))
-    setUser(created)
+    const session = toSession(created)
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+    setSessionUser(created)
     return { ok: true }
   }, [])
 
   const logout = useCallback(() => {
     localStorage.removeItem(SESSION_KEY)
-    setUser(null)
+    setSessionUser(null)
   }, [])
 
-const resetPassword = useCallback(async (email: string) => {
+  const resetPassword = useCallback(async (email: string) => {
     const target = email.trim().toLowerCase()
     let found: User | undefined
     if (supabase) {
@@ -211,9 +251,9 @@ const resetPassword = useCallback(async (email: string) => {
       localStorage.removeItem(RESET_KEY)
       return { ok: false, error: 'Код истёк — запросите заново' }
     }
-    const user = getDB().users.find((u) => u.email.toLowerCase() === target)
-    if (!user) return { ok: false, error: 'Пользователь не найден' }
-    await setUserPassword(user.id, pw)
+    const u = getDB().users.find((x) => x.email.toLowerCase() === target)
+    if (!u) return { ok: false, error: 'Пользователь не найден' }
+    await setUserPassword(u.id, pw)
     localStorage.removeItem(RESET_KEY)
     return { ok: true }
   }, [])
@@ -227,11 +267,12 @@ const resetPassword = useCallback(async (email: string) => {
       if (idx >= 0) d.users[idx] = updated
     })
     pushUser(updated)
-    localStorage.setItem(SESSION_KEY, JSON.stringify(updated))
-    setUser(updated)
+    const session = toSession(updated)
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session))
+    setSessionUser(updated)
   }, [user])
 
-const value = useMemo(
+  const value = useMemo(
     () => ({ user, login, register, logout, resetPassword, confirmResetPassword, updateProfile }),
     [user, login, register, logout, resetPassword, confirmResetPassword, updateProfile],
   )

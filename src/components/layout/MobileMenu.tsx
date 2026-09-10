@@ -12,7 +12,6 @@ const NAV = [
   { key: 'nav.destinations', to: '/tours?tab=dest' },
   { key: 'nav.about', to: '/about' },
   { key: 'nav.gallery', to: '/gallery' },
-  { key: 'nav.contact', to: '/contact' },
   { key: 'nav.favorites', to: '/favorites' },
 ]
 

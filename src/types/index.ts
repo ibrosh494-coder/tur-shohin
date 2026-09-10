@@ -11,6 +11,7 @@ export interface User {
   role: Role
   avatar?: string
   passwordHash?: string
+  salt?: string
   blocked?: boolean
   createdAt: string
 }

@@ -8,12 +8,59 @@ import { supabase } from './supabase'
 
 const DB_KEY = 'turshohin_db_v2'
 
-export async function hashPassword(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text)
-  const buf = await crypto.subtle.digest('SHA-256', data)
+function bufToHex(buf: ArrayBuffer): string {
   return Array.from(new Uint8Array(buf))
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('')
+}
+
+function hexToBuf(hex: string): ArrayBuffer {
+  const bytes = new Uint8Array(hex.length / 2)
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16)
+  }
+  return bytes.buffer
+}
+
+function generateSalt(): string {
+  const salt = new Uint8Array(16)
+  crypto.getRandomValues(salt)
+  return bufToHex(salt.buffer)
+}
+
+/** Хеширование пароля через PBKDF2-SHA256 (100 000 итераций) + случайная соль. */
+export async function hashPassword(text: string, existingSalt?: string): Promise<{ hash: string; salt: string }> {
+  const salt = existingSalt ?? generateSalt()
+  const keyMaterial = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(text),
+    'PBKDF2',
+    false,
+    ['deriveBits'],
+  )
+  const bits = await crypto.subtle.deriveBits(
+    { name: 'PBKDF2', salt: hexToBuf(salt), iterations: 100000, hash: 'SHA-256' },
+    keyMaterial,
+    256,
+  )
+  return { hash: bufToHex(bits), salt }
+}
+
+/** Проверка пароля (совместимость со старым SHA-256 хешем). */
+export async function verifyPassword(
+  text: string,
+  storedHash: string,
+  salt?: string,
+): Promise<boolean> {
+  if (salt) {
+    const { hash } = await hashPassword(text, salt)
+    return hash === storedHash
+  }
+  // Фолбэк: проверяем старый SHA-256 хеш (для миграции существующих аккаунтов).
+  const data = new TextEncoder().encode(text)
+  const buf = await crypto.subtle.digest('SHA-256', data)
+  const legacyHash = bufToHex(buf)
+  return legacyHash === storedHash
 }
 
 function uid(prefix: string) {
@@ -505,7 +552,6 @@ export function deleteNews(id: string) {
 
 export function pushUser(user: DB['users'][number]) {
   const { blocked, avatar, ...rest } = user as DB['users'][number] & { blocked?: boolean }
-  // Маркер блокировки живёт в avatar. Настоящая аватарка — только не-BLOCKED значение.
   const realAvatar = avatar && avatar !== BLOCK_AVATAR ? avatar : null
   pushRow('users', { ...rest, avatar: blocked ? BLOCK_AVATAR : realAvatar })
 }
@@ -526,10 +572,13 @@ export function setUserRole(id: string, role: Role) {
 export async function setUserPassword(id: string, plain: string): Promise<boolean> {
   const password = plain.trim()
   if (!password) return false
-  const hash = await hashPassword(password)
+  const { hash, salt } = await hashPassword(password)
   mutate((d) => {
     const u = d.users.find((x) => x.id === id)
-    if (u) u.passwordHash = hash
+    if (u) {
+      u.passwordHash = hash
+      u.salt = salt
+    }
   })
   const updated = getDB().users.find((x) => x.id === id)
   if (updated) pushUser(updated)

@@ -10,7 +10,6 @@ const LINKS = [
   { key: 'nav.tours', to: '/tours' },
   { key: 'nav.destinations', to: '/tours?tab=dest' },
   { key: 'nav.gallery', to: '/gallery' },
-  { key: 'nav.contact', to: '/contact' },
   { key: 'news.title', to: '/news' },
 ]
 
