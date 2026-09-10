@@ -1,5 +1,5 @@
 export type Lang = 'ru' | 'tj' | 'en'
-export type Role = 'user' | 'manager' | 'admin' | 'superadmin'
+export type Role = 'user' | 'manager' | 'admin'
 
 export type Localized = Record<Lang, string>
 

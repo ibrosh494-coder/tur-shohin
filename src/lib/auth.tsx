@@ -3,13 +3,13 @@ import type { Role, User } from '../types'
 import { mutate, getDB, pushUser, isUserBlocked } from './store'
 import { supabase } from './supabase'
 
-export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2, superadmin: 3 }
+export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2 }
 
 export function canAccess(role: Role, min: number): boolean {
   return (ROLE_RANK[role] ?? 0) >= min
 }
 
-/** Уровень доступа в админке: 1+ любые сотрудники (все разделы), 2+ пользователи (админ и суперадмин). */
+/** Уровень доступа в админке: 1+ любые сотрудники (все разделы), 2+ пользователи (только админ). */
 export const ACCESS = { staff: 1, users: 2 } as const
 
 const SESSION_KEY = 'turshohin_session'
@@ -39,7 +39,7 @@ function ensureSeedUsers() {
         email: 'admin@turshohin.tj',
         name: 'Администратор',
         phone: '+992 90 000 00 00',
-        role: 'superadmin',
+        role: 'admin',
         passwordHash: '',
         createdAt: '2026-01-01',
       })

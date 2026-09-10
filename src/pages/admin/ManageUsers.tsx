@@ -12,14 +12,12 @@ const ROLES: { value: Role; label: string }[] = [
   { value: 'user', label: 'Пользователь' },
   { value: 'manager', label: 'Менеджер' },
   { value: 'admin', label: 'Админ' },
-  { value: 'superadmin', label: 'Супер админ' },
 ]
 
 const ROLE_BADGE: Record<Role, string> = {
   user: 'bg-graphite-100 text-graphite-600',
   manager: 'bg-sand-100 text-sand-700',
-  admin: 'bg-pine-100 text-pine-700',
-  superadmin: 'bg-graphite-900 text-white',
+  admin: 'bg-graphite-900 text-white',
 }
 
 export default function ManageUsers() {
