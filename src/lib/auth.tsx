@@ -9,8 +9,8 @@ export function canAccess(role: Role, min: number): boolean {
   return (ROLE_RANK[role] ?? 0) >= min
 }
 
-/** Уровень доступа в админке: 1+ дашборд/новости, 2+ туры/брони/отзывы, 3+ пользователи. */
-export const ACCESS = { staff: 1, manage: 2, users: 3 } as const
+/** Уровень доступа в админке: 1+ любые сотрудники (все разделы), 2+ пользователи (админ и суперадмин). */
+export const ACCESS = { staff: 1, users: 2 } as const
 
 const SESSION_KEY = 'turshohin_session'
 

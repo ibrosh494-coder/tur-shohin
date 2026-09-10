@@ -6,9 +6,9 @@ import { cn } from '../../components/ui'
 
 const NAV = [
   { to: '/admin', label: 'Дашборд', icon: LayoutDashboard, end: true, min: ACCESS.staff },
-  { to: '/admin/tours', label: 'Туры', icon: Route, min: ACCESS.manage },
-  { to: '/admin/bookings', label: 'Бронирования', icon: ClipboardList, min: ACCESS.manage },
-  { to: '/admin/reviews', label: 'Отзывы', icon: Star, min: ACCESS.manage },
+  { to: '/admin/tours', label: 'Туры', icon: Route, min: ACCESS.staff },
+  { to: '/admin/bookings', label: 'Бронирования', icon: ClipboardList, min: ACCESS.staff },
+  { to: '/admin/reviews', label: 'Отзывы', icon: Star, min: ACCESS.staff },
   { to: '/admin/news', label: 'Новости', icon: Newspaper, min: ACCESS.staff },
   { to: '/admin/users', label: 'Пользователи', icon: Users, min: ACCESS.users },
 ]

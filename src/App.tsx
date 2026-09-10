@@ -83,7 +83,7 @@ export default function App() {
             <Route
               path="tours"
               element={
-                <RequireRole min={2}>
+                <RequireRole min={1}>
                   <ManageTours />
                 </RequireRole>
               }
@@ -91,7 +91,7 @@ export default function App() {
             <Route
               path="bookings"
               element={
-                <RequireRole min={2}>
+                <RequireRole min={1}>
                   <ManageBookings />
                 </RequireRole>
               }
@@ -99,7 +99,7 @@ export default function App() {
             <Route
               path="reviews"
               element={
-                <RequireRole min={2}>
+                <RequireRole min={1}>
                   <ManageReviews />
                 </RequireRole>
               }
@@ -115,7 +115,7 @@ export default function App() {
             <Route
               path="users"
               element={
-                <RequireRole min={3}>
+                <RequireRole min={2}>
                   <ManageUsers />
                 </RequireRole>
               }
