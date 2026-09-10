@@ -1,4 +1,4 @@
-import type { Booking, BookingDraft, BookingStatus, DB, Notification, Review, Tour } from '../types'
+import type { Booking, BookingDraft, BookingStatus, DB, Notification, Review, Role, Tour } from '../types'
 import { categories } from './seed/categories'
 import { destinations } from './seed/destinations'
 import { tours } from './seed/tours'
@@ -502,6 +502,15 @@ export function pushUser(user: DB['users'][number]) {
 
 export function isUserBlocked(user: { avatar?: string; blocked?: boolean }): boolean {
   return user.blocked === true || user.avatar === BLOCK_AVATAR
+}
+
+export function setUserRole(id: string, role: Role) {
+  mutate((d) => {
+    const u = d.users.find((x) => x.id === id)
+    if (u) u.role = role
+  })
+  const updated = getDB().users.find((x) => x.id === id)
+  if (updated) pushUser(updated)
 }
 
 export function toggleUserBlock(id: string): boolean {

@@ -1,7 +1,16 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
-import type { User } from '../types'
+import type { Role, User } from '../types'
 import { mutate, getDB, pushUser, isUserBlocked } from './store'
 import { supabase } from './supabase'
+
+export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2, superadmin: 3 }
+
+export function canAccess(role: Role, min: number): boolean {
+  return (ROLE_RANK[role] ?? 0) >= min
+}
+
+/** Уровень доступа в админке: 1+ дашборд/новости, 2+ туры/брони/отзывы, 3+ пользователи. */
+export const ACCESS = { staff: 1, manage: 2, users: 3 } as const
 
 const SESSION_KEY = 'turshohin_session'
 
@@ -30,7 +39,7 @@ function ensureSeedUsers() {
         email: 'admin@turshohin.tj',
         name: 'Администратор',
         phone: '+992 90 000 00 00',
-        role: 'admin',
+        role: 'superadmin',
         passwordHash: '',
         createdAt: '2026-01-01',
       })

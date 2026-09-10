@@ -58,7 +58,7 @@ export function MobileMenu({ open, onClose }: { open: boolean; onClose: () => vo
                 </Link>
               ))}
 
-              {user?.role === 'admin' && (
+              {user?.role && user.role !== 'user' && (
                 <Link
                   to="/admin"
                   onClick={onClose}

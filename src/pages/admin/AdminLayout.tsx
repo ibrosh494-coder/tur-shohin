@@ -1,26 +1,29 @@
 import { NavLink, Outlet, Link } from 'react-router-dom'
 import { LayoutDashboard, Route, ClipboardList, Star, Newspaper, ArrowLeft, Users } from 'lucide-react'
 import { useApp } from '../../lib/AppContext'
+import { useAuth, canAccess, ACCESS } from '../../lib/auth'
 import { cn } from '../../components/ui'
 
 const NAV = [
-  { to: '/admin', label: 'Дашборд', icon: LayoutDashboard, end: true },
-  { to: '/admin/tours', label: 'Туры', icon: Route },
-  { to: '/admin/bookings', label: 'Бронирования', icon: ClipboardList },
-  { to: '/admin/reviews', label: 'Отзывы', icon: Star },
-  { to: '/admin/news', label: 'Новости', icon: Newspaper },
-  { to: '/admin/users', label: 'Пользователи', icon: Users },
+  { to: '/admin', label: 'Дашборд', icon: LayoutDashboard, end: true, min: ACCESS.staff },
+  { to: '/admin/tours', label: 'Туры', icon: Route, min: ACCESS.manage },
+  { to: '/admin/bookings', label: 'Бронирования', icon: ClipboardList, min: ACCESS.manage },
+  { to: '/admin/reviews', label: 'Отзывы', icon: Star, min: ACCESS.manage },
+  { to: '/admin/news', label: 'Новости', icon: Newspaper, min: ACCESS.staff },
+  { to: '/admin/users', label: 'Пользователи', icon: Users, min: ACCESS.users },
 ]
 
 export default function AdminLayout() {
   const { t } = useApp()
+  const { user } = useAuth()
+  const nav = user ? NAV.filter((n) => canAccess(user.role, n.min)) : []
 
   return (
     <div className="grid min-h-[100svh] bg-graphite-50/70 pt-20 lg:grid-cols-[240px_1fr]">
       <aside className="sticky top-20 hidden h-[calc(100svh-80px)] flex-col border-r border-graphite-200/70 bg-white p-4 lg:flex">
         <p className="px-3 py-2 text-xs font-bold uppercase tracking-wider text-graphite-400">Админ-панель</p>
         <nav className="mt-2 flex flex-1 flex-col gap-1">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <NavLink
               key={n.to}
               to={n.to}
@@ -47,7 +50,7 @@ export default function AdminLayout() {
       <div className="pb-16">
         <div className="border-b border-graphite-200/70 bg-white/80 px-4 py-2 backdrop-blur lg:hidden">
           <div className="no-scrollbar flex gap-2 overflow-x-auto">
-            {NAV.map((n) => (
+            {nav.map((n) => (
               <NavLink
                 key={n.to}
                 to={n.to}
@@ -72,3 +75,4 @@ export default function AdminLayout() {
     </div>
   )
 }
+

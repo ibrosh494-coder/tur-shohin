@@ -1,7 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { ScrollToTop } from './lib/seo'
-import { useAuth } from './lib/auth'
+import { useAuth, canAccess } from './lib/auth'
 import type { ReactNode } from 'react'
 
 // Pages
@@ -32,10 +32,10 @@ function RequireAuth({ children }: { children: ReactNode }) {
   return <>{children}</>
 }
 
-function RequireAdmin({ children }: { children: ReactNode }) {
+function RequireRole({ min, children }: { min: number; children: ReactNode }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/auth" replace state={{ from: '/admin' }} />
-  if (user.role !== 'admin') return <Navigate to="/" replace />
+  if (!canAccess(user.role, min)) return <Navigate to="/admin" replace />
   return <>{children}</>
 }
 
@@ -74,17 +74,52 @@ export default function App() {
           <Route
             path="/admin"
             element={
-              <RequireAdmin>
+              <RequireRole min={1}>
                 <AdminLayout />
-              </RequireAdmin>
+              </RequireRole>
             }
           >
             <Route index element={<Dashboard />} />
-            <Route path="tours" element={<ManageTours />} />
-            <Route path="bookings" element={<ManageBookings />} />
-            <Route path="reviews" element={<ManageReviews />} />
-            <Route path="news" element={<ManageNews />} />
-            <Route path="users" element={<ManageUsers />} />
+            <Route
+              path="tours"
+              element={
+                <RequireRole min={2}>
+                  <ManageTours />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="bookings"
+              element={
+                <RequireRole min={2}>
+                  <ManageBookings />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="reviews"
+              element={
+                <RequireRole min={2}>
+                  <ManageReviews />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="news"
+              element={
+                <RequireRole min={1}>
+                  <ManageNews />
+                </RequireRole>
+              }
+            />
+            <Route
+              path="users"
+              element={
+                <RequireRole min={3}>
+                  <ManageUsers />
+                </RequireRole>
+              }
+            />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Route>

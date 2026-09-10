@@ -50,7 +50,7 @@ export default function Account() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {user.role === 'admin' && (
+              {user.role !== 'user' && (
                 <Link to="/admin" className="btn-outline h-10 px-5">
                   <Sparkles className="h-4 w-4" /> {t('nav.admin')}
                 </Link>

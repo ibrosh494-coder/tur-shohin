@@ -2,10 +2,25 @@ import { useState } from 'react'
 import { ShieldOff, ShieldCheck, Trash2, Search } from 'lucide-react'
 import { useDB } from '../../lib/hooks'
 import { useAuth } from '../../lib/auth'
-import { toggleUserBlock, deleteUser } from '../../lib/store'
+import { toggleUserBlock, deleteUser, setUserRole } from '../../lib/store'
 import { useToast } from '../../lib/toast'
 import { CardChunk, th, td, EmptyRow } from './adminUi'
 import { cn } from '../../components/ui'
+import type { Role } from '../../types'
+
+const ROLES: { value: Role; label: string }[] = [
+  { value: 'user', label: 'Пользователь' },
+  { value: 'manager', label: 'Менеджер' },
+  { value: 'admin', label: 'Админ' },
+  { value: 'superadmin', label: 'Супер админ' },
+]
+
+const ROLE_BADGE: Record<Role, string> = {
+  user: 'bg-graphite-100 text-graphite-600',
+  manager: 'bg-sand-100 text-sand-700',
+  admin: 'bg-pine-100 text-pine-700',
+  superadmin: 'bg-graphite-900 text-white',
+}
 
 export default function ManageUsers() {
   const db = useDB()
@@ -37,6 +52,15 @@ export default function ManageUsers() {
     await deleteUser(id)
     setBusy(null)
     toast.toast('Пользователь удалён')
+  }
+
+  const onChangeRole = (id: string, role: Role) => {
+    if (id === me?.id) {
+      toast.toast('Нельзя менять собственную роль', 'error')
+      return
+    }
+    setUserRole(id, role)
+    toast.toast('Роль обновлена', 'success')
   }
 
   return (
@@ -79,9 +103,21 @@ export default function ManageUsers() {
                     </div>
                   </td>
                   <td className={td}>
-                    <span className={cn('rounded-full px-3 py-1 text-xs font-bold', u.role === 'admin' ? 'bg-graphite-900 text-white' : 'bg-graphite-100 text-graphite-600')}>
-                      {u.role === 'admin' ? 'Админ' : 'Пользователь'}
-                    </span>
+                    {u.id === me?.id ? (
+                      <span className={cn('rounded-full px-3 py-1 text-xs font-bold', ROLE_BADGE[u.role])}>
+                        {ROLES.find((r) => r.value === u.role)?.label}
+                      </span>
+                    ) : (
+                      <select
+                        value={u.role}
+                        onChange={(e) => onChangeRole(u.id, e.target.value as Role)}
+                        className="cursor-pointer rounded-full border border-graphite-200 bg-white px-3 py-1 text-xs font-bold text-graphite-700 outline-none transition-colors hover:border-graphite-400"
+                      >
+                        {ROLES.map((r) => (
+                          <option key={r.value} value={r.value}>{r.label}</option>
+                        ))}
+                      </select>
+                    )}
                   </td>
                   <td className={td}>{u.createdAt}</td>
                   <td className={td}>
