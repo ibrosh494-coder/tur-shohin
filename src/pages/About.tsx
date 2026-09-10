@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Compass, Shield, Users, Heart } from 'lucide-react'
+import { Compass, Shield, Users, Heart, Phone, Mail, MapPin, Clock } from 'lucide-react'
 import { Seo } from '../lib/seo'
 import { useApp } from '../lib/AppContext'
 import { SectionHeader, Reveal, SmartImage } from '../components/ui'
@@ -111,6 +111,53 @@ export default function About() {
                   </div>
                 </Reveal>
               ))}
+            </div>
+          </div>
+
+          <div className="mt-24">
+            <SectionHeader title={t('ft.contacts')} subtitle="Работаем для вас по будням и субботам" />
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              <Reveal>
+                <a href={`tel:${SITE.phone.replace(/[^\d+]/g, '')}`} className="card block p-6 transition-all hover:-translate-y-1 hover:shadow-lift">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-pine-50 text-pine-700">
+                    <Phone className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-graphite-900">Телефон</h3>
+                  <p className="mt-2 text-sm text-graphite-500">{SITE.phone}</p>
+                </a>
+              </Reveal>
+              <Reveal delay={0.08}>
+                <a href={`mailto:${SITE.email}`} className="card block p-6 transition-all hover:-translate-y-1 hover:shadow-lift">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-pine-50 text-pine-700">
+                    <Mail className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-graphite-900">Email</h3>
+                  <p className="mt-2 text-sm text-graphite-500">{SITE.email}</p>
+                </a>
+              </Reveal>
+              <Reveal delay={0.16}>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(SITE.address)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="card block p-6 transition-all hover:-translate-y-1 hover:shadow-lift"
+                >
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-pine-50 text-pine-700">
+                    <MapPin className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-graphite-900">Адрес</h3>
+                  <p className="mt-2 text-sm text-graphite-500">{SITE.address}</p>
+                </a>
+              </Reveal>
+              <Reveal delay={0.24}>
+                <div className="card p-6">
+                  <span className="grid h-12 w-12 place-items-center rounded-2xl bg-pine-50 text-pine-700">
+                    <Clock className="h-6 w-6" />
+                  </span>
+                  <h3 className="mt-4 font-display text-lg font-semibold text-graphite-900">Часы работы</h3>
+                  <p className="mt-2 text-sm text-graphite-500">{SITE.hours}</p>
+                </div>
+              </Reveal>
             </div>
           </div>
         </div>
