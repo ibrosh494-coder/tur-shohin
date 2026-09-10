@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role, User } from '../types'
 import { mutate, getDB, pushUser, isUserBlocked } from './store'
 import { supabase } from './supabase'
@@ -99,6 +99,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useMemo(() => {
     ensureSeedUsers()
   }, [])
+
+  // Если админ заблокировал или удалил пользователя — принудительно выходим из сессии,
+  // даже если он сейчас на любой странице (не только в личном кабинете).
+  useEffect(() => {
+    const check = () => {
+      if (!user) return
+      const cur = getDB().users.find((u) => u.id === user.id)
+      if (!cur || isUserBlocked(cur)) {
+        localStorage.removeItem(SESSION_KEY)
+        setUser(null)
+      }
+    }
+    check()
+    const timer = window.setInterval(check, 8000)
+    return () => window.clearInterval(timer)
+  }, [user])
 
   const login = useCallback(async (email: string, password: string) => {
     const target = email.trim().toLowerCase()

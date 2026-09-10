@@ -2,7 +2,10 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { ScrollToTop } from './lib/seo'
 import { useAuth, canAccess } from './lib/auth'
-import type { ReactNode } from 'react'
+import { useDB } from './lib/hooks'
+import { useToast } from './lib/toast'
+import { isUserBlocked } from './lib/store'
+import { useEffect, useRef, type ReactNode } from 'react'
 
 // Pages
 import Home from './pages/Home'
@@ -26,17 +29,51 @@ import ManageReviews from './pages/admin/ManageReviews'
 import ManageNews from './pages/admin/ManageNews'
 import ManageUsers from './pages/admin/ManageUsers'
 
+function SessionGuard({ children }: { children: ReactNode }) {
+  const { user, logout } = useAuth()
+  const db = useDB()
+  const toast = useToast()
+  const notified = useRef<string | null>(null)
+
+  const dbUser = user ? db.users.find((u) => u.id === user.id) : undefined
+  const deleted = !!user && !dbUser
+  const blocked = !!user && !!dbUser && isUserBlocked(dbUser)
+
+  useEffect(() => {
+    if (blocked && notified.current !== 'blocked') {
+      notified.current = 'blocked'
+      toast.toast('Ваш аккаунт заблокирован администратором', 'error')
+      logout()
+    } else if (deleted && notified.current !== 'deleted') {
+      notified.current = 'deleted'
+      toast.toast('Аккаунт удалён администратором', 'error')
+      logout()
+    }
+  }, [blocked, deleted, logout, toast])
+
+  if (deleted || blocked) return <Navigate to="/auth" replace state={{ from: location.pathname }} />
+  return <>{children}</>
+}
+
 function RequireAuth({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/auth" replace state={{ from: location.pathname }} />
-  return <>{children}</>
+  return (
+    <SessionGuard>
+      <>{children}</>
+    </SessionGuard>
+  )
 }
 
 function RequireRole({ min, children }: { min: number; children: ReactNode }) {
   const { user } = useAuth()
   if (!user) return <Navigate to="/auth" replace state={{ from: '/admin' }} />
   if (!canAccess(user.role, min)) return <Navigate to="/admin" replace />
-  return <>{children}</>
+  return (
+    <SessionGuard>
+      <>{children}</>
+    </SessionGuard>
+  )
 }
 
 export default function App() {
@@ -48,7 +85,14 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/tours" element={<Tours />} />
           <Route path="/tour/:slug" element={<TourDetail />} />
-          <Route path="/booking" element={<Booking />} />
+          <Route
+            path="/booking"
+            element={
+              <SessionGuard>
+                <Booking />
+              </SessionGuard>
+            }
+          />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/news" element={<NewsList />} />
           <Route path="/news/:slug" element={<NewsDetail />} />
