@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Role, User } from '../types'
-import { mutate, getDB, pushUser, isUserBlocked } from './store'
+import { mutate, getDB, pushUser, isUserBlocked, hashPassword } from './store'
 import { supabase } from './supabase'
 
 export const ROLE_RANK: Record<Role, number> = { user: 0, manager: 1, admin: 2 }
@@ -13,14 +13,6 @@ export function canAccess(role: Role, min: number): boolean {
 export const ACCESS = { staff: 1, users: 2 } as const
 
 const SESSION_KEY = 'turshohin_session'
-
-async function sha256(text: string): Promise<string> {
-  const data = new TextEncoder().encode(text)
-  const buf = await crypto.subtle.digest('SHA-256', data)
-  return Array.from(new Uint8Array(buf))
-    .map((b) => b.toString(16).padStart(2, '0'))
-    .join('')
-}
 
 function ensureSeedUsers() {
   if (getDB().users.length === 0) {
@@ -63,7 +55,7 @@ async function hashSeedPasswords() {
       const { data } = await supabase.from('users').select('email').eq('id', w.id).maybeSingle()
       if (data?.email) continue
     }
-    const hash = await sha256(w.hash)
+    const hash = await hashPassword(w.hash)
     mutate((d) => {
       const u = d.users.find((x) => x.id === w.id)
       if (u) u.passwordHash = hash
@@ -130,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } else {
       found = getDB().users.find((u) => u.email.toLowerCase() === target)
     }
-    const hash = await sha256(password)
+    const hash = await hashPassword(password)
     if (!found || found.passwordHash !== hash) {
       return { ok: false, error: 'Неверный email или пароль' }
     }
@@ -155,7 +147,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (exists?.data || getDB().users.some((u) => u.email.toLowerCase() === email)) {
       return { ok: false, error: 'Пользователь с таким email уже существует' }
     }
-    const hash = await sha256(input.password)
+    const hash = await hashPassword(input.password)
     const created: User = {
       id: `user-${Date.now().toString(36)}`,
       email,

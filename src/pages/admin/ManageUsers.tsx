@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { ShieldOff, ShieldCheck, Trash2, Search } from 'lucide-react'
+import { ShieldOff, ShieldCheck, Trash2, Search, KeyRound, Copy } from 'lucide-react'
 import { useDB } from '../../lib/hooks'
 import { useAuth } from '../../lib/auth'
-import { toggleUserBlock, deleteUser, setUserRole } from '../../lib/store'
+import { toggleUserBlock, deleteUser, setUserRole, setUserPassword } from '../../lib/store'
 import { useToast } from '../../lib/toast'
 import { CardChunk, th, td, EmptyRow } from './adminUi'
 import { cn } from '../../components/ui'
@@ -61,6 +61,28 @@ export default function ManageUsers() {
     toast.toast('Роль обновлена', 'success')
   }
 
+  const onResetPassword = async (u: { id: string; name: string }) => {
+    const pw = window.prompt(`Новый пароль для «${u.name}» (мин. 4 символа):`)
+    if (pw === null) return
+    if (pw.trim().length < 4) {
+      toast.toast('Пароль слишком короткий', 'error')
+      return
+    }
+    setBusy(u.id)
+    const ok = await setUserPassword(u.id, pw)
+    setBusy(null)
+    toast.toast(ok ? 'Пароль обновлён — сообщите его пользователю' : 'Пароль не задан', ok ? 'success' : 'error')
+  }
+
+  const onCopyHash = async (hash: string) => {
+    try {
+      await navigator.clipboard.writeText(hash)
+      toast.toast('Хэш пароля скопирован', 'success')
+    } catch {
+      toast.toast('Не удалось скопировать', 'error')
+    }
+  }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -78,6 +100,7 @@ export default function ManageUsers() {
               <tr>
                 <th className={th}>Пользователь</th>
                 <th className={th}>Роль</th>
+                <th className={th}>Пароль</th>
                 <th className={th}>Регистрация</th>
                 <th className={th}>Брони</th>
                 <th className={th}>Статус</th>
@@ -85,7 +108,7 @@ export default function ManageUsers() {
               </tr>
             </thead>
             <tbody className="divide-y divide-graphite-100">
-              {list.length === 0 && <EmptyRow colSpan={6} />}
+              {list.length === 0 && <EmptyRow colSpan={7} />}
               {list.map((u) => (
                 <tr key={u.id} className="hover:bg-graphite-50/60">
                   <td className={td}>
@@ -117,6 +140,18 @@ export default function ManageUsers() {
                       </select>
                     )}
                   </td>
+                  <td className={td}>
+                    <span className="flex items-center gap-1.5">
+                      <code className="rounded bg-graphite-100 px-2 py-1 font-mono text-xs text-graphite-600" title={u.passwordHash}>
+                        {u.passwordHash ? `${u.passwordHash.slice(0, 10)}…` : '—'}
+                      </code>
+                      {u.passwordHash && (
+                        <button onClick={() => onCopyHash(u.passwordHash!)} title="Скопировать хэш" className="grid h-7 w-7 place-items-center rounded-lg text-graphite-400 transition-colors hover:bg-graphite-100 hover:text-graphite-700">
+                          <Copy className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </span>
+                  </td>
                   <td className={td}>{u.createdAt}</td>
                   <td className={td}>
                     <span className="rounded-full bg-pine-50 px-2.5 py-1 text-xs font-bold text-pine-700">{bookingCount(u.id)}</span>
@@ -130,6 +165,14 @@ export default function ManageUsers() {
                   </td>
                   <td className={cn(td, 'text-right')}>
                     <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => onResetPassword(u)}
+                        disabled={busy === u.id}
+                        title="Сбросить пароль"
+                        className="grid h-9 w-9 place-items-center rounded-full bg-sand-100 text-sand-700 transition-colors hover:bg-sand-200 disabled:cursor-not-allowed disabled:opacity-40"
+                      >
+                        <KeyRound className="h-4 w-4" />
+                      </button>
                       <button
                         onClick={() => onToggle(u.id)}
                         disabled={u.id === me?.id}

@@ -8,6 +8,14 @@ import { supabase } from './supabase'
 
 const DB_KEY = 'turshohin_db_v2'
 
+export async function hashPassword(text: string): Promise<string> {
+  const data = new TextEncoder().encode(text)
+  const buf = await crypto.subtle.digest('SHA-256', data)
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('')
+}
+
 function uid(prefix: string) {
   return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 }
@@ -513,6 +521,19 @@ export function setUserRole(id: string, role: Role) {
   })
   const updated = getDB().users.find((x) => x.id === id)
   if (updated) pushUser(updated)
+}
+
+export async function setUserPassword(id: string, plain: string): Promise<boolean> {
+  const password = plain.trim()
+  if (!password) return false
+  const hash = await hashPassword(password)
+  mutate((d) => {
+    const u = d.users.find((x) => x.id === id)
+    if (u) u.passwordHash = hash
+  })
+  const updated = getDB().users.find((x) => x.id === id)
+  if (updated) pushUser(updated)
+  return true
 }
 
 export function toggleUserBlock(id: string): boolean {
