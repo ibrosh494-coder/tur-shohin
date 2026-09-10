@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Plus, Pencil, Trash2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useDB } from '../../lib/hooks'
-import { saveTour, deleteTour } from '../../lib/store'
+import { saveTour, deleteTour, tourPrice } from '../../lib/store'
 import { useToast } from '../../lib/toast'
 import { Button, cn } from '../../components/ui'
 import { CardChunk, th, td, EmptyRow } from './adminUi'
@@ -26,7 +26,7 @@ const emptyTour = (): Tour => ({
   difficulty: 'moderate',
   rating: 4.8,
   reviewsCount: 0,
-  basePrice: 1500,
+  basePrice: 79,
   discountPercent: 0,
   groupSizeMin: 1,
   groupSizeMax: 12,
@@ -102,7 +102,7 @@ export default function ManageTours() {
                     </div>
                   </td>
                   <td className={td}>
-                    <span className="font-bold">{t.basePrice.toLocaleString('ru-RU')} TJS</span>
+                    <span className="font-bold">{tourPrice(t).toLocaleString('ru-RU')} TJS</span>
                     {t.discountPercent ? <span className="ml-2 rounded-full bg-sand-100 px-2 py-0.5 text-xs font-bold text-sand-700">−{t.discountPercent}%</span> : null}
                   </td>
                   <td className={td}>{t.durationDays}</td>
@@ -197,7 +197,7 @@ export default function ManageTours() {
                   <input value={editing.region} onChange={(e) => setEditing({ ...editing, region: e.target.value })} className="input-base" />
                 </label>
                 <label>
-                  <span className="label">Цена (TJS) *</span>
+                  <span className="label">Цена за день (TJS) *</span>
                   <input type="number" value={editing.basePrice} onChange={(e) => setEditing({ ...editing, basePrice: Number(e.target.value) })} className="input-base" />
                 </label>
                 <label>
